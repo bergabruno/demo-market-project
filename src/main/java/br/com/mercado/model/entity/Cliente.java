@@ -1,5 +1,7 @@
 package br.com.mercado.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +22,7 @@ public class Cliente {
     private String cpf;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<Pedido> pedidos = new ArrayList<>();
 
     public Cliente(Integer id, String nome, String cpf) {
