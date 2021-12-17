@@ -1,6 +1,8 @@
 package br.com.mercado.model.entity;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.security.AllPermission;
@@ -9,16 +11,19 @@ import java.util.List;
 
 @Entity
 @NoArgsConstructor
+@Getter@Setter
 public class Estoque {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id = 1;
 
     @OneToMany(mappedBy = "estoque", cascade = CascadeType.ALL)
     List<Produto> produtos = new ArrayList<>();
 
-    public Estoque(int id){
-        this.id = id;
+    private Integer quantidadeDoProduto;
+
+    public Estoque(Integer quantidadeDoProduto){
+        this.quantidadeDoProduto = quantidadeDoProduto;
     }
 }

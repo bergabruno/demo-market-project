@@ -15,12 +15,17 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    private String nome;
+
+    private String cpf;
+
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Pedido> pedidos = new ArrayList<>();
 
-
-    public Cliente(Integer id) {
+    public Cliente(Integer id, String nome, String cpf) {
         this.id = id;
+        this.nome = nome;
+        this.cpf = cpf;
     }
 
     public Cliente( ) {
