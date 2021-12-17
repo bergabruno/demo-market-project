@@ -22,10 +22,11 @@ public class ClienteController {
     public ResponseEntity<Cliente> buscarPorCodigo(@PathVariable Integer id){
         Cliente cliente = clienteService.buscar(id);
 
-        if(cliente == null){
+        if(cliente == null)
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
 
         return ResponseEntity.ok().body(cliente);
     }
+
+
 }

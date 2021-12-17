@@ -1,5 +1,7 @@
 package br.com.mercado.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +21,7 @@ public class Categoria {
 
     private String nome;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "categorias", cascade = CascadeType.ALL)
     private List<Produto> produtos = new ArrayList<>();
 

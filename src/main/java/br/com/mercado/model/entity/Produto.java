@@ -1,5 +1,7 @@
 package br.com.mercado.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jdk.jfr.DataAmount;
 import lombok.Data;
 import lombok.Getter;
@@ -35,6 +37,7 @@ public class Produto implements Serializable {
     @ManyToMany(cascade= CascadeType.ALL)
     @JoinTable(name="produto_pedido",
     joinColumns = @JoinColumn(name = "produto_id"), inverseJoinColumns = @JoinColumn(name = "pedido_id"))
+    @JsonIgnore
     List<Pedido> pedidos = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
@@ -42,6 +45,7 @@ public class Produto implements Serializable {
             joinColumns = @JoinColumn(name = "produto_id"),
             inverseJoinColumns = @JoinColumn(name = "categoria_id")
     )
+    @JsonIgnore
     private List<Categoria> categorias;
 
 
