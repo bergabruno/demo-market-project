@@ -56,8 +56,7 @@ public class MercadoApplication implements CommandLineRunner {
 		ped2.getProdutos().addAll(Arrays.asList(p1,p2));
 		p1.getPedidos().add(ped2);
 		p2.getPedidos().add(ped2);
-
-
+		
 		ped1.setValorTotal(ped1.getValorTotal());
 		//colocar auto
 
