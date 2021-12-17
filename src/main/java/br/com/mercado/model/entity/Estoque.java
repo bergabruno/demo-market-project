@@ -23,7 +23,13 @@ public class Estoque {
 
     private Integer quantidadeDoProduto;
 
-    public Estoque(Integer quantidadeDoProduto){
+    public Estoque(Integer quantidadeDoProduto) {
         this.quantidadeDoProduto = quantidadeDoProduto;
+    }
+
+
+    public void adicionarProduto(Produto produto, Integer quantidade){
+        this.getProdutos().add(produto);
+        this.quantidadeDoProduto = quantidade;
     }
 }

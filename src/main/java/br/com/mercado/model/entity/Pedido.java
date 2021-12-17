@@ -1,5 +1,7 @@
 package br.com.mercado.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +25,7 @@ public class Pedido implements Serializable {
     private List<Produto> produtos = new ArrayList<>();
 
     @ManyToOne
+    @JsonManagedReference
     private Cliente cliente;
 
 

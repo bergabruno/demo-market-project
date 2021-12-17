@@ -53,8 +53,13 @@ public class MercadoApplication implements CommandLineRunner {
 		p1.getPedidos().add(ped2);
 		p2.getPedidos().add(ped2);
 
-//		estoque.getProdutos().add();
 
+		estoque.adicionarProduto(p1, 5);
+		p1.setEstoque(estoque);
+
+
+		estoque.adicionarProduto(p2, 32);
+		p2.setEstoque(estoque);
 		cliente.getPedidos().addAll(Arrays.asList(ped1,ped2));
 		clienteRepository.save(cliente);
 
