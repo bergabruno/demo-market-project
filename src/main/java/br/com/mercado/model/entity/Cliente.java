@@ -2,7 +2,9 @@ package br.com.mercado.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -11,6 +13,7 @@ import java.util.List;
 
 @Entity
 @Getter@Setter
+@NoArgsConstructor
 public class Cliente {
 
     @Id
@@ -23,7 +26,7 @@ public class Cliente {
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     @JsonBackReference
-    private List<Pedido> pedidos = new ArrayList<>();
+    private List<Pedido> pedidos= new ArrayList<>();
 
     public Cliente(Integer id, String nome, String cpf) {
         this.id = id;
@@ -31,6 +34,4 @@ public class Cliente {
         this.cpf = cpf;
     }
 
-    public Cliente( ) {
-    }
 }

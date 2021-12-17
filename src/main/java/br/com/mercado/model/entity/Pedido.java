@@ -2,6 +2,7 @@ package br.com.mercado.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,25 +29,19 @@ public class Pedido implements Serializable {
     @JsonManagedReference
     private Cliente cliente;
 
+    private Double valorTotal;
 
     public Pedido(Integer id, Cliente cliente) {
         this.id = id;
         this.cliente = cliente;
     }
 
-    public Integer getId() {
-        return id;
+    public Double getValorTotal(){
+        Double valor = 0.0;
+        for (Produto p : getProdutos()) {
+            valor += p.getValorUnitario();
+        }
+        return valor;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public List<Produto> getProdutos() {
-        return produtos;
-    }
-
-    public void setProdutos(List<Produto> produtos) {
-        this.produtos = produtos;
-    }
 }
