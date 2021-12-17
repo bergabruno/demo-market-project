@@ -1,5 +1,6 @@
 package br.com.mercado.service;
 
+import br.com.mercado.exceptions.ObjectNotFoundExcepction;
 import br.com.mercado.model.entity.Cliente;
 import br.com.mercado.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,6 @@ public class ClienteService {
 
     public Cliente buscar(Integer id){
         Optional<Cliente> cliente = clienteRepository.findById(id);
-        return cliente.orElseThrow(() -> new RuntimeException("Erro ao encontrar por este codigo!"));
+        return cliente.orElseThrow(() -> new ObjectNotFoundExcepction("Erro ao encontrar por este codigo!"));
     }
 }
