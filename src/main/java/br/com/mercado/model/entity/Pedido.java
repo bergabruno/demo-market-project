@@ -23,25 +23,28 @@ public class Pedido implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToMany(mappedBy = "pedidos", cascade = CascadeType.ALL)
-    private List<Produto> produtos = new ArrayList<>();
+    @OneToMany (mappedBy = "pedido", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<ItemPedido> itens = new ArrayList<>();
 
     @ManyToOne
     private Cliente cliente;
-
-    private Double valorTotal;
 
     public Pedido(Integer id, Cliente cliente) {
         this.id = id;
         this.cliente = cliente;
     }
 
-    public Double getValorTotal(){
-        Double valor = 0.0;
-        for (Produto p : getProdutos()) {
-            valor += p.getValorUnitario();
+    //JSON mostra esse metodo
+    //caso a classe nao tenha o nome da var apos o GET, o JSON executa esse metodo!
+    public double getValorTotal() {
+        double soma = 0.0;
+        for (ItemPedido ip : itens) {
+            soma = soma + ip.getSubTotal();
         }
-        return valor;
+        return soma;
     }
+
+
 
 }

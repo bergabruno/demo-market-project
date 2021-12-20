@@ -30,15 +30,15 @@ public class Produto implements Serializable {
 
     private String dataValidade;
 
+    @JsonIgnore
+    //quantidade em estoque, nao no pedido - arrumar isso
     private Integer quantidade;
 
     private Double valorUnitario;
 
-    @ManyToMany(cascade= CascadeType.ALL)
-    @JoinTable(name="produto_pedido",
-    joinColumns = @JoinColumn(name = "produto_id"), inverseJoinColumns = @JoinColumn(name = "pedido_id"))
+    @OneToMany(cascade= CascadeType.ALL, mappedBy = "pedido")
     @JsonIgnore
-    List<Pedido> pedidos = new ArrayList<>();
+    List<ItemPedido> itens = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "PRODUTO_CATEGORIA",
