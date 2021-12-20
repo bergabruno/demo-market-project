@@ -23,8 +23,8 @@ public class Pedido implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToMany(mappedBy = "pedidos", cascade = CascadeType.ALL)
-    private List<Produto> produtos = new ArrayList<>();
+    @OneToMany (mappedBy = "pedido", cascade = CascadeType.ALL)
+    private List<ItemPedido> itemPedidos = new ArrayList<>();
 
     @ManyToOne
     private Cliente cliente;
@@ -36,12 +36,5 @@ public class Pedido implements Serializable {
         this.cliente = cliente;
     }
 
-    public Double getValorTotal(){
-        Double valor = 0.0;
-        for (Produto p : getProdutos()) {
-            valor += p.getValorUnitario();
-        }
-        return valor;
-    }
 
 }
