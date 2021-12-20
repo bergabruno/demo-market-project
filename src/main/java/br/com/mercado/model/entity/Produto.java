@@ -38,7 +38,7 @@ public class Produto implements Serializable {
 
     @OneToMany(cascade= CascadeType.ALL, mappedBy = "pedido")
     @JsonIgnore
-    List<ItemPedido> itemPedidos = new ArrayList<>();
+    List<ItemPedido> itens = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "PRODUTO_CATEGORIA",

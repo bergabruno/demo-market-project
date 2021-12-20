@@ -24,17 +24,27 @@ public class Pedido implements Serializable {
     private Integer id;
 
     @OneToMany (mappedBy = "pedido", cascade = CascadeType.ALL)
-    private List<ItemPedido> itemPedidos = new ArrayList<>();
+    @JsonManagedReference
+    private List<ItemPedido> itens = new ArrayList<>();
 
     @ManyToOne
     private Cliente cliente;
-
-    private Double valorTotal;
 
     public Pedido(Integer id, Cliente cliente) {
         this.id = id;
         this.cliente = cliente;
     }
+
+    //JSON mostra esse metodo
+    //caso a classe nao tenha o nome da var apos o GET, o JSON executa esse metodo!
+    public double getValorTotal() {
+        double soma = 0.0;
+        for (ItemPedido ip : itens) {
+            soma = soma + ip.getSubTotal();
+        }
+        return soma;
+    }
+
 
 
 }

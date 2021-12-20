@@ -1,5 +1,8 @@
 package br.com.mercado.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,6 +19,7 @@ public class ItemPedido {
     @Id
     @Column(name = "item_pedido_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private long itemPedidoID;
 
     @ManyToOne(cascade = CascadeType.ALL)
@@ -24,26 +28,26 @@ public class ItemPedido {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "pedido_id")
+    @JsonBackReference
     private Pedido pedido;
 
     private Double desconto;
 
     private Integer quantidade;
 
-
-//    public Double getValorTotal(){
-//        Double valor = 0.0;
-//        for (Produto p : getProduto()) {
-//            valor += p.getValorUnitario() * p.getQuantidade();
-//        }
-//        return valor;
-//    }
+    private Double preco;
 
 
-    public ItemPedido(Produto produto, Pedido pedido, Double desconto, Integer quantidade) {
+    public double getSubTotal() {
+        return (preco - desconto) * quantidade;
+    }
+
+
+    public ItemPedido(Produto produto, Pedido pedido, Double desconto, Integer quantidade, Double preco) {
         this.produto = produto;
         this.pedido = pedido;
         this.desconto = desconto;
+        this.preco = preco;
         this.quantidade = quantidade;
     }
 }

@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Arrays;
-import java.util.Date;
 
 @SpringBootApplication
 @RestController
@@ -50,28 +49,22 @@ public class MercadoApplication implements CommandLineRunner {
 		Pedido ped1 = new Pedido(null, cliente);
 
 		Pedido ped2 = new Pedido(null, cliente);
-		
-		ped1.setValorTotal(ped1.getValorTotal());
+
+		ItemPedido ip1 = new ItemPedido(p1, ped1, 0.0, 2,p1.getValorUnitario() );
+		ItemPedido ip2 = new ItemPedido(p2, ped1, 0.0, 1, p2.getValorUnitario());
+		ItemPedido ip3 = new ItemPedido(p3, ped1, 0.0, 1, p3.getValorUnitario());
 
 
+		ped1.getItens().addAll(Arrays.asList(ip1,ip2,ip3));
 
-		ItemPedido ip1 = new ItemPedido(p1, ped1, 0.0, 2);
-		ItemPedido ip2 = new ItemPedido(p2, ped1, 0.0, 1);
-		ItemPedido ip3 = new ItemPedido(p3, ped1, 0.0, 1);
-
-
-		ped1.getItemPedidos().addAll(Arrays.asList(ip1,ip2,ip3));
-
-		p1.getItemPedidos().addAll(Arrays.asList(ip1));
-		p2.getItemPedidos().addAll(Arrays.asList(ip3));
-		p3.getItemPedidos().addAll(Arrays.asList(ip2));
+		p1.getItens().addAll(Arrays.asList(ip1));
+		p2.getItens().addAll(Arrays.asList(ip3));
+		p3.getItens().addAll(Arrays.asList(ip2));
 
 
 
 		cliente.getPedidos().addAll(Arrays.asList(ped1,ped2));
 		clienteRepository.save(cliente);
-
-//		System.out.println(ped2.getValorTotal());
 
 	}
 }
