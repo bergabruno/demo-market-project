@@ -23,12 +23,10 @@ public class Pedido implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @JsonIgnore
     @ManyToMany(mappedBy = "pedidos", cascade = CascadeType.ALL)
     private List<Produto> produtos = new ArrayList<>();
 
     @ManyToOne
-    @JsonIgnore
     private Cliente cliente;
 
     private Double valorTotal;
