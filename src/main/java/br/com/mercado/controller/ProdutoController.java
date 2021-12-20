@@ -10,11 +10,14 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/produtos")
+@CrossOrigin(allowedHeaders = "*", origins = "*")
+//@Api(value = "Api rest")
 public class ProdutoController {
 
     ProdutoService produtoService;
 
     @GetMapping("/buscar/{id}")
+//    @ApiOperation(value = "busca por codigo")
     public ResponseEntity<Produto> buscarPorCodigo(@PathVariable Integer id){
         Produto produto = produtoService.buscar(id);
 
@@ -26,6 +29,7 @@ public class ProdutoController {
     }
 
     @PostMapping
+//    @ApiOperation(value = "salva um produto no banco")
     public ResponseEntity<Produto> salvar(@RequestBody Produto produto){
         produtoService.salvar(produto);
 
