@@ -8,11 +8,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.apache.catalina.connector.Response;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
@@ -36,8 +38,9 @@ public class CategoriaController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> inserir(@RequestBody Categoria categoria){
+    public ResponseEntity<Void> inserir(@Valid @RequestBody CategoriaDTO categoriaDTO){
 
+        Categoria categoria = categoriaService.fromDTO(categoriaDTO);
         categoria = categoriaService.inserir(categoria);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
@@ -68,5 +71,18 @@ public class CategoriaController {
         List<CategoriaDTO> listDTO = lista.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
 
         return ResponseEntity.ok().body(listDTO);
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<Page<CategoriaDTO>> obterPagina(
+           @RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "24") Integer linhasPorPage,
+           @RequestParam(defaultValue = "nome") String ordenarPor, @RequestParam(defaultValue = "ASC") String direcao){
+        Page<Categoria> lista = categoriaService.obterPagina(page, linhasPorPage, ordenarPor, direcao);
+
+        Page<CategoriaDTO> listDTO = lista.map(obj -> new CategoriaDTO(obj));
+        //nao mostrar os produtos da categoria no postman
+
+        return ResponseEntity.ok().body(listDTO);
+
     }
 }

@@ -31,7 +31,14 @@ public class MercadoApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		Cliente cliente = new Cliente(null, "Bruno Bergamasco", "322131212");
-		Categoria cat1 = new Categoria(null, "Informatica");
+
+		Categoria cat1 = new Categoria(null, "Informática");
+		Categoria cat2 = new Categoria(null, "Escritório");
+		Categoria cat3 = new Categoria(null, "Cama mesa e banho");
+		Categoria cat4 = new Categoria(null, "Eletrônicos");
+		Categoria cat5 = new Categoria(null, "Jardinagem");
+		Categoria cat6 = new Categoria(null, "Decoração");
+		Categoria cat7 = new Categoria(null, "Perfumaria");
 
 
 		Produto p1 = new Produto(null, "Computador", "645098349085",
@@ -65,10 +72,10 @@ public class MercadoApplication implements CommandLineRunner {
 		p3.getItens().addAll(Arrays.asList(ip2));
 
 
-
-
 		cliente.getPedidos().addAll(Arrays.asList(ped1,ped2));
 		clienteRepository.save(cliente);
+
+		categoriaRepository.saveAll(Arrays.asList(cat2,cat3,cat4,cat5,cat6,cat7));
 
 	}
 }
