@@ -54,12 +54,16 @@ public class MercadoApplication implements CommandLineRunner {
 		ItemPedido ip2 = new ItemPedido(p2, ped1, 0.0, 1, p2.getValorUnitario());
 		ItemPedido ip3 = new ItemPedido(p3, ped1, 0.0, 1, p3.getValorUnitario());
 
+		ItemPedido ip4 = new ItemPedido(p2, ped2, 0.0, 5, p2.getValorUnitario());
+
 
 		ped1.getItens().addAll(Arrays.asList(ip1,ip2,ip3));
+		ped2.getItens().add(ip4);
 
 		p1.getItens().addAll(Arrays.asList(ip1));
-		p2.getItens().addAll(Arrays.asList(ip3));
+		p2.getItens().addAll(Arrays.asList(ip3,ip4));
 		p3.getItens().addAll(Arrays.asList(ip2));
+
 
 
 

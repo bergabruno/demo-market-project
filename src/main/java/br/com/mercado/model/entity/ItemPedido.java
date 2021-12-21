@@ -28,16 +28,18 @@ public class ItemPedido {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "pedido_id")
-    @JsonBackReference
+    @JsonIgnore
     private Pedido pedido;
 
     private Double desconto;
 
     private Integer quantidade;
 
+    @JsonIgnore
     private Double preco;
 
 
+    @JsonIgnore
     public double getSubTotal() {
         return (preco - desconto) * quantidade;
     }

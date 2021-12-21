@@ -16,7 +16,7 @@ public class PedidoController {
 
     PedidoService pedidoService;
 
-    @GetMapping("/buscar/{id}")
+    @GetMapping("/{id}")
 //    @ApiOperation(value = "busca por codigo")
     public ResponseEntity<Pedido> buscarPorCodigo(@PathVariable Integer id){
         Pedido pedido = pedidoService.buscar(id);

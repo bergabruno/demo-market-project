@@ -16,14 +16,10 @@ public class ProdutoController {
 
     ProdutoService produtoService;
 
-    @GetMapping("/buscar/{id}")
+    @GetMapping("/{id}")
 //    @ApiOperation(value = "busca por codigo")
     public ResponseEntity<Produto> buscarPorCodigo(@PathVariable Integer id){
         Produto produto = produtoService.buscar(id);
-
-        if(produto == null){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
 
         return ResponseEntity.ok().body(produto);
     }

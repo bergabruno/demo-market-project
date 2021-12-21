@@ -18,7 +18,7 @@ public class ClienteController {
 
     ClienteService clienteService;
 
-    @GetMapping("/buscar/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<Cliente> buscarPorCodigo(@PathVariable Integer id){
         Cliente cliente = clienteService.buscar(id);
 

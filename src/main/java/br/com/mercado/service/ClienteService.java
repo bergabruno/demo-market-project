@@ -1,6 +1,6 @@
 package br.com.mercado.service;
 
-import br.com.mercado.exceptions.ObjectNotFoundExcepction;
+import br.com.mercado.service.exceptions.ObjectNotFoundExcepction;
 import br.com.mercado.model.entity.Cliente;
 import br.com.mercado.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
