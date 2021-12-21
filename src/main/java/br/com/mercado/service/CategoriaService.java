@@ -7,6 +7,7 @@ import br.com.mercado.repository.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -42,6 +43,14 @@ public class CategoriaService {
         if(!cat.get().getProdutos().isEmpty())
                 throw new DataIntegrityException("Nao é possivel excluir uma categoria que possui produtos");
         categoriaRepository.deleteById(id);
+    }
+
+    public List<Categoria> obterTodos(){
+        List<Categoria> categorias =  categoriaRepository.findAll();
+
+        if(categorias.isEmpty())
+            throw new ObjectNotFoundExcepction("Nao foi encontrado nenhuma categoria!");
+        return categorias;
     }
 
 }

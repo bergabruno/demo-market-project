@@ -1,5 +1,6 @@
 package br.com.mercado.controller;
 
+import br.com.mercado.dto.CategoriaDTO;
 import br.com.mercado.model.entity.Categoria;
 import br.com.mercado.repository.CategoriaRepository;
 import br.com.mercado.service.CategoriaService;
@@ -13,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController
@@ -55,5 +58,15 @@ public class CategoriaController {
     public ResponseEntity<Void> deletar(@PathVariable Integer id){
         categoriaService.deletar(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CategoriaDTO>> listarTodos(){
+        List<Categoria> lista = categoriaService.obterTodos();
+
+        //nao mostrar os produtos da categoria no postman
+        List<CategoriaDTO> listDTO = lista.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(listDTO);
     }
 }
