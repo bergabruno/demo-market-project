@@ -24,11 +24,12 @@ public class Pedido implements Serializable {
     private Integer id;
 
     @OneToMany (mappedBy = "pedido", cascade = CascadeType.ALL)
-    @JsonManagedReference
     private List<ItemPedido> itens = new ArrayList<>();
 
     @ManyToOne
     private Cliente cliente;
+
+//    private Pagamento pagamento;
 
     public Pedido(Integer id, Cliente cliente) {
         this.id = id;

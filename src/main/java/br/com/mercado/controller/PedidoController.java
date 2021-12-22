@@ -16,7 +16,9 @@ public class PedidoController {
 
     PedidoService pedidoService;
 
-    @GetMapping("/buscar/{id}")
+
+
+    @GetMapping("/{id}")
 //    @ApiOperation(value = "busca por codigo")
     public ResponseEntity<Pedido> buscarPorCodigo(@PathVariable Integer id){
         Pedido pedido = pedidoService.buscar(id);
@@ -26,5 +28,23 @@ public class PedidoController {
         }
 
         return ResponseEntity.ok().body(pedido);
+    }
+
+    @PostMapping
+    public ResponseEntity<Pedido> salvar(@RequestBody Pedido pedido){
+
+        pedidoService.salvar(pedido);
+
+        return new ResponseEntity<Pedido>(pedido, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/adicionar-produto/{idPedido}/{codBarras}/{quantidadeProd}")
+    public ResponseEntity<Pedido> addProduto(
+            @PathVariable Integer idPedido, @PathVariable String codBarras, @PathVariable int quantidadeProd){
+
+        pedidoService.addProduto(idPedido, codBarras, quantidadeProd);
+
+        return new ResponseEntity<Pedido>(pedidoService.buscar(idPedido), HttpStatus.CREATED);
+
     }
 }

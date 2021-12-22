@@ -25,13 +25,22 @@ public class Cliente {
 
     private String cpf;
 
+    private String email;
+
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Pedido> pedidos= new ArrayList<>();
 
-    public Cliente(Integer id, String nome, String cpf) {
+    public Cliente(Integer id, String nome, String email) {
         this.id = id;
         this.nome = nome;
+        this.email = email;
+    }
+
+    public Cliente(Integer id, String nome, String email, String cpf) {
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
         this.cpf = cpf;
     }
 

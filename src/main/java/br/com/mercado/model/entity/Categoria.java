@@ -21,7 +21,6 @@ public class Categoria {
 
     private String nome;
 
-    @JsonIgnore
     @ManyToMany(mappedBy = "categorias", cascade = CascadeType.ALL)
     private List<Produto> produtos = new ArrayList<>();
 

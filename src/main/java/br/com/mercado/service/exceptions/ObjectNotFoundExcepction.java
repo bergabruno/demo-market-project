@@ -1,4 +1,4 @@
-package br.com.mercado.exceptions;
+package br.com.mercado.service.exceptions;
 
 public class ObjectNotFoundExcepction extends RuntimeException{
 
