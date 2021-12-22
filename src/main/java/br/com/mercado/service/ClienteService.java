@@ -4,10 +4,10 @@ import br.com.mercado.dto.ClienteDTO;
 import br.com.mercado.model.entity.Cliente;
 import br.com.mercado.service.exceptions.DataIntegrityException;
 import br.com.mercado.service.exceptions.ObjectNotFoundExcepction;
-import br.com.mercado.model.entity.Cliente;
 import br.com.mercado.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -55,10 +55,17 @@ public class ClienteService {
         return new Cliente(clienteDTO.getId(), clienteDTO.getNome(), clienteDTO.getEmail());
     }
 
+    @Transactional
+    public Cliente salvar(Cliente cliente){
+        cliente.setId(null);
+        cliente = clienteRepository.save(cliente);
+        return cliente;
+    }
 
     private void updateData(Cliente newCliente, Cliente cliente){
         newCliente.setNome(cliente.getNome());
         newCliente.setEmail(cliente.getEmail());
     }
+
 
 }

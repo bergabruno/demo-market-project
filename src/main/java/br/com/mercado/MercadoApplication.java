@@ -43,7 +43,7 @@ public class MercadoApplication implements CommandLineRunner {
 
 		Produto p1 = new Produto(null, "Computador", "645098349085",
 				"20/02/2002", 2, 10.00);
-		Produto p2 = new Produto(null, "Notebook", "05478305834",
+		Produto p2 = new Produto(null, "Notebook", "430345874524",
 				"30/12/2021", 10, 25.00);
 		Produto p3 = new Produto(null, "Testancia", "05478305834",
 				"30/12/2021", 10, 50.00);

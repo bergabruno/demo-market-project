@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.naming.ldap.PagedResultsControl;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,6 +29,7 @@ public class CategoriaService {
         if(categoria == null){
             //implementar erro.
         }
+        categoria.setId(null);
         categoriaRepository.save(categoria);
         return categoria;
     }
@@ -37,7 +37,10 @@ public class CategoriaService {
     public Categoria alterar(Categoria categoria){
         if(!categoriaRepository.existsById(categoria.getId()))
             throw new ObjectNotFoundExcepction("Nao existe nenhuma categoria com este ID!");
-        return categoriaRepository.save(categoria);
+
+        Categoria newCat = buscar(categoria.getId());
+        updateData(newCat, categoria);
+        return categoriaRepository.save(newCat);
     }
 
     public void deletar(Integer id){
@@ -65,6 +68,10 @@ public class CategoriaService {
 
     public Categoria fromDTO(CategoriaDTO categoriaDTO){
         return new Categoria(categoriaDTO.getId(), categoriaDTO.getNome());
+    }
+
+    private void updateData(Categoria newCat, Categoria categoria){
+        newCat.setNome(categoria.getNome());
     }
 
 }

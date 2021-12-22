@@ -24,4 +24,6 @@ public class ProdutoService {
             throw new RuntimeException("Produto incompleto");
         produtoRepository.save(produto);
     }
+
+
 }
