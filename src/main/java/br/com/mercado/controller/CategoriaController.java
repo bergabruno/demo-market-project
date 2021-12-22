@@ -28,15 +28,6 @@ public class CategoriaController {
 
     CategoriaService categoriaService;
 
-
-    @GetMapping("/{id}")
-    @ApiOperation(value = "Buscar categoria")
-    public ResponseEntity<Categoria> buscar(@PathVariable Integer id){
-       Categoria categoria = categoriaService.buscar(id);
-
-        return new ResponseEntity<Categoria>(categoria, HttpStatus.OK);
-    }
-
     @PostMapping
     public ResponseEntity<Void> inserir(@Valid @RequestBody CategoriaDTO categoriaDTO){
 
@@ -75,16 +66,23 @@ public class CategoriaController {
         return ResponseEntity.ok().body(listDTO);
     }
 
+    @GetMapping("/{id}")
+    @ApiOperation(value = "Buscar categoria")
+    public ResponseEntity<Categoria> buscar(@PathVariable Integer id){
+        Categoria categoria = categoriaService.buscar(id);
+
+        return new ResponseEntity<Categoria>(categoria, HttpStatus.OK);
+    }
+
     @GetMapping("/page")
     public ResponseEntity<Page<CategoriaDTO>> obterPagina(
-           @RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "24") Integer linhasPorPage,
-           @RequestParam(defaultValue = "nome") String ordenarPor, @RequestParam(defaultValue = "ASC") String direcao){
+            @RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "24") Integer linhasPorPage,
+            @RequestParam(defaultValue = "nome") String ordenarPor, @RequestParam(defaultValue = "ASC") String direcao){
         Page<Categoria> lista = categoriaService.obterPagina(page, linhasPorPage, ordenarPor, direcao);
 
         Page<CategoriaDTO> listDTO = lista.map(obj -> new CategoriaDTO(obj));
         //nao mostrar os produtos da categoria no postman
 
         return ResponseEntity.ok().body(listDTO);
-
     }
 }

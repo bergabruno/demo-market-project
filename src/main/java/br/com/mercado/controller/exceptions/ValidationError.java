@@ -1,6 +1,5 @@
 package br.com.mercado.controller.exceptions;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -30,7 +30,7 @@ public class MercadoApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		Cliente cliente = new Cliente(null, "Bruno Bergamasco", "322131212");
+		Cliente cliente = new Cliente(null, "Bruno Bergamasco", "brunoberga@gmail.com", "543534543");
 
 		Categoria cat1 = new Categoria(null, "Informática");
 		Categoria cat2 = new Categoria(null, "Escritório");
