@@ -15,7 +15,6 @@ public class CategoriaDTO {
     private Integer id;
 
     @NotEmpty(message = "Preenchimento Obrigatorio")
-    @Length(min = 3, max = 80, message = "nome precisa estar entre 3-80")
     private String nome;
 
     public CategoriaDTO(Categoria categoria){

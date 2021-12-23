@@ -9,21 +9,10 @@ import org.springframework.stereotype.Service;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
-public class ProdutoService {
+public interface ProdutoService {
 
-    private ProdutoRepository produtoRepository;
-
-    public Produto buscar(Integer id){
-        Optional<Produto> produto = produtoRepository.findById(id);
-        return produto.orElseThrow(() -> new ObjectNotFoundExcepction("Erro ao encontrar produto com este ID!"));
-    }
-
-    public void salvar(Produto produto){
-        if(produto == null)
-            throw new RuntimeException("Produto incompleto");
-        produtoRepository.save(produto);
-    }
+    public Produto buscar(Integer id);
+    public void salvar(Produto produto);
 
 
 }
