@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/pedidos")
+@RequestMapping("api/v1/pedidos")
 @CrossOrigin(allowedHeaders = "*", origins = "*")
 public class PedidoController {
 

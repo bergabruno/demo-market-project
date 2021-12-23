@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/categorias")
+@RequestMapping("api/v1/categorias")
 @Api(value = "Categoria Controller")
 public class CategoriaController {
 

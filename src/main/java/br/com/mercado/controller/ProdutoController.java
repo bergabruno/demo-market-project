@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/produtos")
+@RequestMapping("api/v1/produtos")
 @CrossOrigin(allowedHeaders = "*", origins = "*")
 //@Api(value = "Api rest")
 public class ProdutoController {
