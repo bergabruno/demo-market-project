@@ -45,8 +45,8 @@ public class MercadoApplication implements CommandLineRunner {
 				"20/02/2002", 2, 10.00);
 		Produto p2 = new Produto(null, "Notebook", "430345874524",
 				"30/12/2021", 10, 25.00);
-		Produto p3 = new Produto(null, "Testancia", "05478305834",
-				"30/12/2021", 10, 50.00);
+		Produto p3 = new Produto(null, "Farinha de trigo", "05478305834",
+				"30/12/2021", 10, 4.50);
 
 		cat1.getProdutos().addAll(Arrays.asList(p1,p2,p3));
 		p1.setCategoria(cat1);

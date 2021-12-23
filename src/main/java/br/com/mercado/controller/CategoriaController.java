@@ -7,7 +7,6 @@ import br.com.mercado.service.CategoriaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
-import org.apache.catalina.connector.Response;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,18 +16,18 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController
 @RequestMapping("/categorias")
-@Api(value = "Categoria Controller", description = "REST API for Pet")
+@Api(value = "Categoria Controller")
 public class CategoriaController {
 
     CategoriaService categoriaService;
 
     @PostMapping
+    @ApiOperation(value = "Inserir categoria")
     public ResponseEntity<Void> inserir(@Valid @RequestBody CategoriaDTO categoriaDTO){
 
         Categoria categoria = categoriaService.fromDTO(categoriaDTO);
@@ -41,6 +40,7 @@ public class CategoriaController {
     }
 
     @PutMapping("/{id}")
+    @ApiOperation(value = "Alterar categoria")
     public ResponseEntity<Void> alterar(@Valid @RequestBody CategoriaDTO categoriaDTO,
                                         @PathVariable Integer id){
         Categoria categoria = categoriaService.fromDTO(categoriaDTO);
@@ -51,12 +51,14 @@ public class CategoriaController {
     }
 
     @DeleteMapping("/{id}")
+    @ApiOperation(value = "deletar categoria")
     public ResponseEntity<Void> deletar(@PathVariable Integer id){
         categoriaService.deletar(id);
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping
+    @ApiOperation(value = "Listar todas categorias")
     public ResponseEntity<List<CategoriaDTO>> listarTodos(){
         List<Categoria> lista = categoriaService.obterTodos();
 
@@ -75,6 +77,7 @@ public class CategoriaController {
     }
 
     @GetMapping("/page")
+    @ApiOperation(value = "Obter Paginacao de categoria")
     public ResponseEntity<Page<CategoriaDTO>> obterPagina(
             @RequestParam(defaultValue = "0") Integer page, @RequestParam(defaultValue = "24") Integer linhasPorPage,
             @RequestParam(defaultValue = "nome") String ordenarPor, @RequestParam(defaultValue = "ASC") String direcao){
