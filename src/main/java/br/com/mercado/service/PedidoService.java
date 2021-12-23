@@ -5,6 +5,7 @@ import br.com.mercado.model.entity.Pedido;
 import br.com.mercado.model.entity.Produto;
 import br.com.mercado.repository.PedidoRepository;
 import br.com.mercado.repository.ProdutoRepository;
+import br.com.mercado.service.exceptions.ObjectNotFoundExcepction;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,10 @@ public class PedidoService {
 
 
     public Pedido buscar(Integer id){
+        if(!pedidoRepository.existsById(id))
+            throw new ObjectNotFoundExcepction("Nao existe nenhum pedido com este ID!");
+
+
         Optional<Pedido> pedido = pedidoRepository.findById(id);
         pedido.get().setCliente(pedido.get().getCliente());
         return pedido.orElseThrow(() -> new RuntimeException("Erro ao encontrar produto com este ID!"));
