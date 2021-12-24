@@ -1,8 +1,10 @@
 package br.com.mercado.controller;
 
 import br.com.mercado.dto.ClienteDTO;
+import br.com.mercado.dto.ClienteNewDTO;
 import br.com.mercado.model.entity.Cliente;
 import br.com.mercado.service.ClienteService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,47 +13,73 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController
 @RequestMapping("api/v1/clientes")
+@Api(value = "Cliente Controller")
 public class ClienteController {
 
     ClienteService clienteService;
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Void> alterar(@Valid @RequestBody ClienteDTO clienteDTO,
-                                        @PathVariable Integer id){
-        Cliente cliente = clienteService.fromDTO(clienteDTO);
-        cliente.setId(id);
-        cliente = clienteService.alterar(cliente);
+    private final Logger log = Logger.getLogger("br.com.mercado.controller.ClienteController");
 
-        return ResponseEntity.noContent().build();
+    @PostMapping
+    @ApiOperation(value = "inserir um cliente")
+    public ResponseEntity<Cliente> inserir(@Valid @RequestBody ClienteNewDTO clienteDTO){
+        log.info("Iniciando insercao de cliente");
+        Cliente cliente = clienteService.fromDTO(clienteDTO);
+        clienteService.inserir(cliente);
+        log.info("Insercao feita com sucesso do Cliente!");
+        return new ResponseEntity<Cliente>(cliente, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Integer id){ clienteService.deletar(id);
-        return ResponseEntity.noContent().build();
+    @GetMapping("/{id}")
+    @ApiOperation(value = "buscar cliente por codigo")
+    public ResponseEntity<Cliente> buscarPorCodigo(@PathVariable Integer id){
+        log.info("Iniciando busca de cliente por id");
+        Cliente cliente = clienteService.buscarPorCodigo(id);
+
+        log.info("busca realizada com sucesso.");
+        return new ResponseEntity<Cliente>(cliente, HttpStatus.OK);
     }
 
     @GetMapping
+    @ApiOperation(value = "listar todos os clientes")
     public ResponseEntity<List<ClienteDTO>> listarTodos(){
+        log.info("Iniciando listagem de todos cliente");
         List<Cliente> lista = clienteService.obterTodos();
 
         //nao mostrar os produtos da cliente no postman
         List<ClienteDTO> listDTO = lista.stream().map(obj -> new ClienteDTO(obj)).collect(Collectors.toList());
 
+        log.info("Listagem feita com sucesso e mostrando no corpo da requisicao.");
         return ResponseEntity.ok().body(listDTO);
     }
 
-    @GetMapping("/{id}")
-    @ApiOperation(value = "Buscar cliente")
-    public ResponseEntity<Cliente> buscar(@PathVariable Integer id){
-        Cliente cliente = clienteService.buscar(id);
+    @PutMapping("/{id}")
+    @ApiOperation(value = "alterar um cliente pelo id")
+    public ResponseEntity<Void> alterar(@Valid @RequestBody ClienteDTO clienteDTO,
+                                        @PathVariable Integer id){
+        log.info("Iniciando alteracao de cliente");
 
-        return new ResponseEntity<Cliente>(cliente, HttpStatus.OK);
+        Cliente cliente = clienteService.fromDTO(clienteDTO);
+        cliente.setId(id);
+        cliente = clienteService.alterar(cliente);
+
+        log.info("alteracao feita com sucesso");
+        return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping("/{id}")
+    @ApiOperation(value = "deletar um cliente por codigo")
+    public ResponseEntity<Void> deletar(@PathVariable Integer id){
+        log.info("Iniciando delecao de cliente");
 
+        clienteService.deletar(id);
+        log.info("delecao feita com sucesso de cliente");
+        return ResponseEntity.noContent().build();
+    }
 }

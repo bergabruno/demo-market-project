@@ -1,34 +1,29 @@
 package br.com.mercado.dto;
 
-import br.com.mercado.model.entity.Cliente;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Size;
 
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-public class ClienteDTO {
+public class ClienteNewDTO {
 
-    Integer id;
+    private Integer id;
 
     @NotEmpty(message = "Preenchimento obrigatorio")
-   private String nome;
+    private String nome;
+
+    @NotEmpty(message = "Preenchimento obrigatorio")
+    private String cpf;
 
     @NotEmpty(message = "Preenchimento obrigatorio")
     @Email(message = "email Invalido")
     private String email;
 
-    public ClienteDTO(Cliente cliente){
-        this.id = cliente.getId();
-        this.nome = cliente.getNome();
-        this.email = cliente.getEmail();
-    }
 }

@@ -30,10 +30,6 @@ public class Produto implements Serializable {
 
     private String dataValidade;
 
-    @JsonIgnore
-    //quantidade em estoque, nao no pedido - arrumar isso
-    private Integer quantidade;
-
     private Double valorUnitario;
 
     @OneToMany(cascade= CascadeType.ALL, mappedBy = "pedido")
@@ -49,12 +45,11 @@ public class Produto implements Serializable {
     private List<Categoria> categorias;
 
 
-    public Produto(Integer id, String nome, String codBarras, String dataValidade, Integer quantidade, Double valorUnitario) {
+    public Produto(Integer id, String nome, String codBarras, String dataValidade, Double valorUnitario) {
         this.id = id;
         this.nome = nome;
         this.codBarras = codBarras;
         this.dataValidade = dataValidade;
-        this.quantidade = quantidade;
         this.valorUnitario = valorUnitario;
     }
 

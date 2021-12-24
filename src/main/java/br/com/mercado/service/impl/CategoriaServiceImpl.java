@@ -21,15 +21,15 @@ public class CategoriaServiceImpl implements CategoriaService {
     @Autowired
     CategoriaRepository categoriaRepository;
 
-    public Categoria buscar(Integer id){
+    public Categoria buscarPorCodigo(Integer id){
         Optional<Categoria> categoria = categoriaRepository.findById(id);
         return categoria.orElseThrow(() -> new ObjectNotFoundExcepction("Erro ao encontrar por este codigo!"));
     }
 
     public Categoria inserir(Categoria categoria){
         if(categoria == null){
-            //implementar erro.
-        }
+
+         }
         categoria.setId(null);
         categoriaRepository.save(categoria);
         return categoria;
@@ -39,7 +39,7 @@ public class CategoriaServiceImpl implements CategoriaService {
         if(!categoriaRepository.existsById(categoria.getId()))
             throw new ObjectNotFoundExcepction("Nao existe nenhuma categoria com este ID!");
 
-        Categoria newCat = buscar(categoria.getId());
+        Categoria newCat = buscarPorCodigo(categoria.getId());
         updateData(newCat, categoria);
         return categoriaRepository.save(newCat);
     }
