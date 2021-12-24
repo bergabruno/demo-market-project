@@ -14,12 +14,15 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 public class CategoriaServiceImpl implements CategoriaService {
 
     @Autowired
     CategoriaRepository categoriaRepository;
+
+    private final Logger log = Logger.getLogger("br.com.mercado.service.impl.CategoriaController");
 
     public Categoria buscarPorCodigo(Integer id){
         Optional<Categoria> categoria = categoriaRepository.findById(id);

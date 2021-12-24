@@ -39,10 +39,11 @@ public class PedidoServiceImpl implements PedidoService {
 
     @Transactional
     public Pedido criarPedido(Pedido pedido){
-        Optional<Cliente> cliente = clienteRepository.findByCpf(pedido.getCliente().getCpf());
-
-        cliente.get().getPedidos().add(pedido);
-        pedido.setCliente(cliente.get());
+        if(pedido.getCliente() != null) {
+            Optional<Cliente> cliente = clienteRepository.findByCpf(pedido.getCliente().getCpf());
+            cliente.get().getPedidos().add(pedido);
+            pedido.setCliente(cliente.get());
+        }
 
         pedidoRepository.save(pedido);
         return pedido;
