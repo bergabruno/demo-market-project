@@ -1,6 +1,7 @@
 package br.com.mercado;
 
 import br.com.mercado.model.entity.*;
+import br.com.mercado.model.entity.enums.StatusPedido;
 import br.com.mercado.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -42,20 +43,20 @@ public class MercadoApplication implements CommandLineRunner {
 
 
 		Produto p1 = new Produto(null, "Computador", "645098349085",
-				"20/02/2002", 2, 10.00);
+				"20/02/2002", 10.00);
 		Produto p2 = new Produto(null, "Notebook", "430345874524",
-				"30/12/2021", 10, 25.00);
-		Produto p3 = new Produto(null, "Testancia", "05478305834",
-				"30/12/2021", 10, 50.00);
+				"30/12/2021", 25.00);
+		Produto p3 = new Produto(null, "Farinha de trigo", "05478305834",
+				"30/12/2021",  4.50);
 
 		cat1.getProdutos().addAll(Arrays.asList(p1,p2,p3));
 		p1.setCategoria(cat1);
 		p2.setCategoria(cat1);
 		p3.setCategoria(cat1);
 
-		Pedido ped1 = new Pedido(null, cliente);
+		Pedido ped1 = new Pedido(null, cliente, StatusPedido.FINALIZADO);
 
-		Pedido ped2 = new Pedido(null, cliente);
+		Pedido ped2 = new Pedido(null, cliente, StatusPedido.EM_ANDAMENTO);
 
 		ItemPedido ip1 = new ItemPedido(p1, ped1, 0.0, 2,p1.getValorUnitario() );
 		ItemPedido ip2 = new ItemPedido(p2, ped1, 0.0, 1, p2.getValorUnitario());
