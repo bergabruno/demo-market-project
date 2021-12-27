@@ -5,6 +5,7 @@ import br.com.mercado.service.ProdutoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +30,7 @@ public class ProdutoController {
         produtoService.inserir(produto);
 
         log.info("insercao feita com sucesso do produto!");
-        return ResponseEntity.ok().body(produto);
+        return new ResponseEntity<Produto>(produto, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

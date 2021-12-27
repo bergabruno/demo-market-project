@@ -4,8 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 
 @AllArgsConstructor
@@ -14,16 +16,15 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 public class ClienteNewDTO {
 
-    private Integer id;
-
-    @NotEmpty(message = "Preenchimento obrigatorio")
+    @NotBlank
     private String nome;
 
-    @NotEmpty(message = "Preenchimento obrigatorio")
+    @NotBlank
+    @CPF(message = "CPF inválido")
     private String cpf;
 
-    @NotEmpty(message = "Preenchimento obrigatorio")
-    @Email(message = "email Invalido")
+    @NotBlank
+    @Email(message = "Email inválido")
     private String email;
 
 }

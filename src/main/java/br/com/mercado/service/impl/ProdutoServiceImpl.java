@@ -15,15 +15,15 @@ public class ProdutoServiceImpl implements ProdutoService {
 
     private ProdutoRepository produtoRepository;
 
-    public Produto buscarPorCodigo(Integer id){
-        Optional<Produto> produto = produtoRepository.findById(id);
-        return produto.orElseThrow(() -> new ObjectNotFoundExcepction("Erro ao encontrar produto com este ID!"));
-    }
-
     public void inserir(Produto produto){
         if(produto == null)
             throw new RuntimeException("Produto incompleto");
         produtoRepository.save(produto);
+    }
+
+    public Produto buscarPorCodigo(Integer id){
+        Optional<Produto> produto = produtoRepository.findById(id);
+        return produto.orElseThrow(() -> new ObjectNotFoundExcepction("Erro ao encontrar produto com este ID!"));
     }
 
 

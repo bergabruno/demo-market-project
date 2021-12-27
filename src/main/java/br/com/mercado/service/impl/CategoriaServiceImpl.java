@@ -24,24 +24,37 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     private final Logger log = Logger.getLogger("br.com.mercado.service.impl.CategoriaController");
 
-    public Categoria buscarPorCodigo(Integer id){
-        Optional<Categoria> categoria = categoriaRepository.findById(id);
-        return categoria.orElseThrow(() -> new ObjectNotFoundExcepction("Erro ao encontrar por este codigo!"));
-    }
-
     public Categoria inserir(Categoria categoria){
-        if(categoria == null){
-
-         }
         categoria.setId(null);
         categoriaRepository.save(categoria);
         return categoria;
     }
 
-    public Categoria alterar(Categoria categoria){
-        if(!categoriaRepository.existsById(categoria.getId()))
-            throw new ObjectNotFoundExcepction("Nao existe nenhuma categoria com este ID!");
+    public Categoria buscarPorCodigo(Integer id){
+        Optional<Categoria> categoria = categoriaRepository.findById(id);
+        return categoria.orElseThrow(() -> new ObjectNotFoundExcepction("Erro ao encontrar por este codigo!"));
+    }
 
+    public List<Categoria> obterTodos(){
+        List<Categoria> categorias =  categoriaRepository.findAll();
+
+        if(categorias.isEmpty()) {
+            log.info("Nao existe nenhuma categoria");
+            throw new ObjectNotFoundExcepction("Nao foi encontrado nenhuma categoria!");
+        }
+        return categorias;
+    }
+
+    public Page<Categoria> obterPagina(Integer page, Integer linhasPorPage, String ordenarPor, String direcao){
+        PageRequest pageRequest = PageRequest.of(page,linhasPorPage, Sort.Direction.valueOf(direcao), ordenarPor);
+        return categoriaRepository.findAll(pageRequest);
+    }
+
+    public Categoria alterar(Categoria categoria){
+        if(!categoriaRepository.existsById(categoria.getId())) {
+            log.info("Nao foi encontrado nenhuma categoria com este id");
+            throw new ObjectNotFoundExcepction("Nao existe nenhuma categoria com este ID!");
+        }
         Categoria newCat = buscarPorCodigo(categoria.getId());
         updateData(newCat, categoria);
         return categoriaRepository.save(newCat);
@@ -55,19 +68,6 @@ public class CategoriaServiceImpl implements CategoriaService {
         if(!cat.get().getProdutos().isEmpty())
             throw new DataIntegrityException("Nao é possivel excluir uma categoria que possui produtos");
         categoriaRepository.deleteById(id);
-    }
-
-    public List<Categoria> obterTodos(){
-        List<Categoria> categorias =  categoriaRepository.findAll();
-
-        if(categorias.isEmpty())
-            throw new ObjectNotFoundExcepction("Nao foi encontrado nenhuma categoria!");
-        return categorias;
-    }
-
-    public Page<Categoria> obterPagina(Integer page, Integer linhasPorPage, String ordenarPor, String direcao){
-        PageRequest pageRequest = PageRequest.of(page,linhasPorPage, Sort.Direction.valueOf(direcao), ordenarPor);
-        return categoriaRepository.findAll(pageRequest);
     }
 
     public Categoria fromDTO(CategoriaDTO categoriaDTO){

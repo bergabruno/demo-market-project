@@ -7,16 +7,20 @@ import br.com.mercado.model.entity.Pedido;
 import br.com.mercado.model.entity.Produto;
 import br.com.mercado.model.entity.enums.StatusPedido;
 import br.com.mercado.repository.ClienteRepository;
+import br.com.mercado.repository.ItemPedidoRepository;
 import br.com.mercado.repository.PedidoRepository;
 import br.com.mercado.repository.ProdutoRepository;
 import br.com.mercado.service.PedidoService;
 import br.com.mercado.service.exceptions.DataIntegrityException;
 import br.com.mercado.service.exceptions.ObjectNotFoundExcepction;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Optional;
+import java.util.logging.Logger;
 
 @Service
 @AllArgsConstructor
@@ -28,14 +32,9 @@ public class PedidoServiceImpl implements PedidoService {
 
     private ClienteRepository clienteRepository;
 
-    public Pedido buscarPorCodigo(Integer id){
-        if(!pedidoRepository.existsById(id))
-            throw new ObjectNotFoundExcepction("Nao existe nenhum pedido com este ID!");
+    private ItemPedidoRepository itemPedidoRepository;
 
-        Optional<Pedido> pedido = pedidoRepository.findById(id);
-        pedido.get().setCliente(pedido.get().getCliente());
-        return pedido.orElseThrow(() -> new RuntimeException("Erro ao encontrar produto com este ID!"));
-    }
+    private final Logger log = Logger.getLogger("br.com.mercado.service.impl.PedidoServiceImpl");
 
     @Transactional
     public Pedido criarPedido(Pedido pedido){
@@ -47,6 +46,15 @@ public class PedidoServiceImpl implements PedidoService {
 
         pedidoRepository.save(pedido);
         return pedido;
+    }
+
+    public Pedido buscarPorCodigo(Integer id){
+        if(!pedidoRepository.existsById(id))
+            throw new ObjectNotFoundExcepction("Nao existe nenhum pedido com este ID!");
+
+        Optional<Pedido> pedido = pedidoRepository.findById(id);
+        pedido.get().setCliente(pedido.get().getCliente());
+        return pedido.orElseThrow(() -> new RuntimeException("Erro ao encontrar produto com este ID!"));
     }
 
     //tirar o iddopedido e colocar um current
@@ -66,6 +74,18 @@ public class PedidoServiceImpl implements PedidoService {
 
         Optional<Produto> produto = produtoRepository.findByCodBarras(codBarras);
 
+
+        //TODO fazer a adicao por fora do repository
+        for(int i = 0; i < pedido.getItens().size(); i++) {
+            log.info("entrando no for");
+           if(pedido.getItens().get(i).getProduto().getId().equals(produto.get().getId())){
+               log.info("entrando no if");
+               itemPedidoRepository.adicionarProduto(quantidadeProd,pedido.getId(),produto.get().getId());
+                log.info("valor da quantidade " + pedido.getItens().get(i).getQuantidade());
+               return pedido;
+           }
+        }
+
         ItemPedido ip = new ItemPedido(produto.get(), pedido, 0.0, quantidadeProd, produto.get().getValorUnitario());
 
         pedido.getItens().add(ip);
@@ -73,6 +93,25 @@ public class PedidoServiceImpl implements PedidoService {
 
         return pedido;
     }
+
+    public Pedido delProduto(Integer idPedido, String codBarras, int quantidadeProd){
+        Pedido pedido = buscarPorCodigo(idPedido);
+
+        Optional<Produto> produto = produtoRepository.findByCodBarras(codBarras);
+
+        for(int i = 0; i < pedido.getItens().size(); i++) {
+            log.info("entrando no for");
+            if (pedido.getItens().get(i).getProduto().getId().equals(produto.get().getId())) {
+                log.info("entrando no if");
+                itemPedidoRepository.deletarProduto(quantidadeProd, pedido.getId(), produto.get().getId());
+
+                return pedido;
+            }
+        }
+
+        throw new ObjectNotFoundExcepction("Nao foi encontrado nenhum produto com este codigo de barras no pedido!");
+    }
+
 
     public Pedido finalizarPedido(Integer id){
         Pedido pedido = buscarPorCodigo(id);
@@ -100,7 +139,7 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     public Pedido fromDTO(PedidoDTO pedidoDTO){
-        return new Pedido(pedidoDTO.getId(), pedidoDTO.getCliente(), StatusPedido.EM_ANDAMENTO);
+        return new Pedido(pedidoDTO.getId(), pedidoDTO.getCliente(), StatusPedido.EM_ANDAMENTO, LocalDate.now());
     }
 
 }

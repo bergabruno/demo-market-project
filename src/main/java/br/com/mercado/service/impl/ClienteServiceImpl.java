@@ -21,7 +21,6 @@ public class ClienteServiceImpl implements ClienteService {
     @Autowired
     ClienteRepository clienteRepository;
 
-    @Transactional
     public Cliente inserir(Cliente cliente){
         cliente.setId(null);
 
@@ -37,6 +36,14 @@ public class ClienteServiceImpl implements ClienteService {
     public Cliente buscarPorCodigo(Integer id){
         Optional<Cliente> cliente = clienteRepository.findById(id);
         return cliente.orElseThrow(() -> new ObjectNotFoundExcepction("Erro ao encontrar por este codigo!"));
+    }
+
+    public List<Cliente> obterTodos(){
+        List<Cliente> clientes =  clienteRepository.findAll();
+
+        if(clientes.isEmpty())
+            throw new ObjectNotFoundExcepction("Nao foi encontrado nenhum cliente!");
+        return clientes;
     }
 
     public Cliente alterar(Cliente cliente){
@@ -59,20 +66,13 @@ public class ClienteServiceImpl implements ClienteService {
         clienteRepository.deleteById(id);
     }
 
-    public List<Cliente> obterTodos(){
-        List<Cliente> clientes =  clienteRepository.findAll();
-
-        if(clientes.isEmpty())
-            throw new ObjectNotFoundExcepction("Nao foi encontrado nenhum cliente!");
-        return clientes;
-    }
 
     public Cliente fromDTO(ClienteDTO clienteDTO){
         return new Cliente(clienteDTO.getId(), clienteDTO.getNome(), clienteDTO.getEmail());
     }
 
     public Cliente fromDTO(ClienteNewDTO clienteDTO){
-        return new Cliente(clienteDTO.getId(), clienteDTO.getNome(), clienteDTO.getEmail(), clienteDTO.getCpf());
+        return new Cliente(null ,clienteDTO.getNome(), clienteDTO.getEmail(), clienteDTO.getCpf());
     }
 
     private void updateData(Cliente newCliente, Cliente cliente){

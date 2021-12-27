@@ -43,14 +43,9 @@ public class PedidoController {
 
         Pedido pedido = pedidoService.buscarPorCodigo(id);
 
-        if (pedido == null)
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
         log.info("busca feita com sucesso e retornando pedido");
-
         return ResponseEntity.ok().body(pedido);
     }
-
 
     @PostMapping("/adicionar-produto/{idPedido}/{codBarras}")
     @ApiOperation(value = "Adicionar produto ao pedido")
@@ -60,9 +55,20 @@ public class PedidoController {
 
         log.info("Iniciando a insercao de um produto no pedido");
 
-        pedidoService.addProduto(idPedido, codBarras, quantidadeProd);
+        Pedido pedido = pedidoService.addProduto(idPedido, codBarras, quantidadeProd);
 
         log.info("Insercao do produto no pedido com sucesso");
+
+        return new ResponseEntity<Pedido>(pedido, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/deletar-produto/{idPedido}/{codBarras}")
+    @ApiOperation(value = "Adicionar produto ao pedido")
+    public ResponseEntity<Pedido> delProduto(
+            @PathVariable Integer idPedido, @PathVariable String codBarras,
+            @RequestParam(defaultValue = "1") int quantidadeProd) {
+
+        pedidoService.delProduto(idPedido, codBarras, quantidadeProd);
 
         return new ResponseEntity<Pedido>(pedidoService.buscarPorCodigo(idPedido), HttpStatus.CREATED);
     }
