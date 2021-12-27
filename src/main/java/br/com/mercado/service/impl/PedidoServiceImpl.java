@@ -37,8 +37,8 @@ public class PedidoServiceImpl implements PedidoService {
     private final Logger log = Logger.getLogger("br.com.mercado.service.impl.PedidoServiceImpl");
 
     @Transactional
-    public Pedido criarPedido(Pedido pedido){
-        if(pedido.getCliente() != null) {
+    public Pedido criarPedido(Pedido pedido) {
+        if (pedido.getCliente() != null) {
             Optional<Cliente> cliente = clienteRepository.findByCpf(pedido.getCliente().getCpf());
             cliente.get().getPedidos().add(pedido);
             pedido.setCliente(cliente.get());
@@ -48,8 +48,8 @@ public class PedidoServiceImpl implements PedidoService {
         return pedido;
     }
 
-    public Pedido buscarPorCodigo(Integer id){
-        if(!pedidoRepository.existsById(id))
+    public Pedido buscarPorCodigo(Integer id) {
+        if (!pedidoRepository.existsById(id))
             throw new ObjectNotFoundExcepction("Nao existe nenhum pedido com este ID!");
 
         Optional<Pedido> pedido = pedidoRepository.findById(id);
@@ -59,31 +59,26 @@ public class PedidoServiceImpl implements PedidoService {
 
     //tirar o iddopedido e colocar um current
     @Transactional
-    public Pedido addProduto(Integer idPedido, String codBarras, int quantidadeProd){
+    public Pedido addProduto(Integer idPedido, String codBarras, int quantidadeProd) {
 
         Pedido pedido = buscarPorCodigo(idPedido);
 
-        if(!pedido.getStatusPedido().equals(StatusPedido.EM_ANDAMENTO))
+        if (!pedido.getStatusPedido().equals(StatusPedido.EM_ANDAMENTO))
             throw new RuntimeException("Nao é possivel inserir um produto em um pedido que nao está em andamento");
 
-        if(produtoRepository.findByCodBarras(codBarras).isEmpty())
+        if (produtoRepository.findByCodBarras(codBarras).isEmpty())
             throw new ObjectNotFoundExcepction("Nao existe nenhum produto com este cod de barras");
 
-        if(pedido.getStatusPedido().getCod() != 3)
+        if (pedido.getStatusPedido().getCod() != 3)
             throw new RuntimeException("Nao é possivel inserir produtos em um pedido finalizado/cancelado!");
 
         Optional<Produto> produto = produtoRepository.findByCodBarras(codBarras);
 
+        //fazendo a soma do produto caso ja tenha esse produto
+        Pedido pedidoSomado = somarOuSubtrairProd(pedido, produto.get().getId(), quantidadeProd, "+");
 
-        //TODO fazer a adicao por fora do repository
-        for(int i = 0; i < pedido.getItens().size(); i++) {
-            log.info("entrando no for");
-           if(pedido.getItens().get(i).getProduto().getId().equals(produto.get().getId())){
-               log.info("entrando no if");
-               itemPedidoRepository.adicionarProduto(quantidadeProd,pedido.getId(),produto.get().getId());
-                log.info("valor da quantidade " + pedido.getItens().get(i).getQuantidade());
-               return pedido;
-           }
+        if (pedidoSomado != null) {
+            return pedidoSomado;
         }
 
         ItemPedido ip = new ItemPedido(produto.get(), pedido, 0.0, quantidadeProd, produto.get().getValorUnitario());
@@ -94,31 +89,27 @@ public class PedidoServiceImpl implements PedidoService {
         return pedido;
     }
 
-    public Pedido delProduto(Integer idPedido, String codBarras, int quantidadeProd){
+    public Pedido delProduto(Integer idPedido, String codBarras, int quantidadeProd) {
         Pedido pedido = buscarPorCodigo(idPedido);
 
         Optional<Produto> produto = produtoRepository.findByCodBarras(codBarras);
 
-        for(int i = 0; i < pedido.getItens().size(); i++) {
-            log.info("entrando no for");
-            if (pedido.getItens().get(i).getProduto().getId().equals(produto.get().getId())) {
-                log.info("entrando no if");
-                itemPedidoRepository.deletarProduto(quantidadeProd, pedido.getId(), produto.get().getId());
+        Pedido pedidoSomado = somarOuSubtrairProd(pedido, produto.get().getId(), quantidadeProd, "-");
 
-                return pedido;
-            }
+        if (pedidoSomado != null) {
+            return pedidoSomado;
         }
 
         throw new ObjectNotFoundExcepction("Nao foi encontrado nenhum produto com este codigo de barras no pedido!");
     }
 
 
-    public Pedido finalizarPedido(Integer id){
+    public Pedido finalizarPedido(Integer id) {
         Pedido pedido = buscarPorCodigo(id);
 
-        if(pedido.getItens().isEmpty())
+        if (pedido.getItens().isEmpty())
             throw new DataIntegrityException("Nao é possivel encerrar um produto sem nenhum produto, cancele-o!");
-        if(pedido.getStatusPedido().equals(StatusPedido.CANCELADO))
+        if (pedido.getStatusPedido().equals(StatusPedido.CANCELADO))
             throw new DataIntegrityException("Nao é possivel finalizar um pedido que foi cancelado!");
 
         pedido.setStatusPedido(StatusPedido.FINALIZADO);
@@ -128,7 +119,7 @@ public class PedidoServiceImpl implements PedidoService {
         return pedido;
     }
 
-    public Pedido cancelarPedido(Integer id){
+    public Pedido cancelarPedido(Integer id) {
         Pedido pedido = buscarPorCodigo(id);
 
         pedido.setStatusPedido(StatusPedido.CANCELADO);
@@ -138,8 +129,24 @@ public class PedidoServiceImpl implements PedidoService {
         return pedido;
     }
 
-    public Pedido fromDTO(PedidoDTO pedidoDTO){
+    public Pedido fromDTO(PedidoDTO pedidoDTO) {
         return new Pedido(pedidoDTO.getId(), pedidoDTO.getCliente(), StatusPedido.EM_ANDAMENTO, LocalDate.now());
+    }
+
+    private Pedido somarOuSubtrairProd(Pedido pedido, Integer idProduto, int quantidadeProd, String sinal) {
+
+        for (int i = 0; i < pedido.getItens().size(); i++) {
+            if (pedido.getItens().get(i).getProduto().getId().equals(idProduto)) {
+                Optional<ItemPedido> ip2 = itemPedidoRepository.acharItemPedido(pedido.getId(), idProduto);
+                if (sinal.equalsIgnoreCase("+")) {
+                    ip2.get().setQuantidade(ip2.get().getQuantidade() + quantidadeProd);
+                } else {
+                    ip2.get().setQuantidade(ip2.get().getQuantidade() - quantidadeProd);
+                }
+                return pedido;
+            }
+        }
+        return null;
     }
 
 }
