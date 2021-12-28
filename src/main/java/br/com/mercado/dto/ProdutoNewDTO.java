@@ -1,5 +1,6 @@
 package br.com.mercado.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProdutoDTO {
+public class ProdutoNewDTO {
 
     @NotBlank
     private String nome;
@@ -24,4 +25,7 @@ public class ProdutoDTO {
 
     @NotNull
     private Double valorUnitario;
+
+    @NotNull
+    private Integer idCategoria;
 }

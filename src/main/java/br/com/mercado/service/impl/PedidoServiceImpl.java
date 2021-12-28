@@ -108,7 +108,7 @@ public class PedidoServiceImpl implements PedidoService {
         Pedido pedido = buscarPorCodigo(id);
 
         if (pedido.getItens().isEmpty())
-            throw new DataIntegrityException("Nao é possivel encerrar um produto sem nenhum produto, cancele-o!");
+            throw new DataIntegrityException("Nao é possivel encerrar um pedido sem nenhum produto, cancele-o!");
         if (pedido.getStatusPedido().equals(StatusPedido.CANCELADO))
             throw new DataIntegrityException("Nao é possivel finalizar um pedido que foi cancelado!");
 
@@ -137,11 +137,11 @@ public class PedidoServiceImpl implements PedidoService {
 
         for (int i = 0; i < pedido.getItens().size(); i++) {
             if (pedido.getItens().get(i).getProduto().getId().equals(idProduto)) {
-                Optional<ItemPedido> ip2 = itemPedidoRepository.acharItemPedido(pedido.getId(), idProduto);
+               ItemPedido ip2 = itemPedidoRepository.acharItemPedido(pedido.getId(), idProduto).get();
                 if (sinal.equalsIgnoreCase("+")) {
-                    ip2.get().setQuantidade(ip2.get().getQuantidade() + quantidadeProd);
+                    ip2.setQuantidade(ip2.get().getQuantidade() + quantidadeProd);
                 } else {
-                    ip2.get().setQuantidade(ip2.get().getQuantidade() - quantidadeProd);
+                    ip2.setQuantidade(ip2.get().getQuantidade() - quantidadeProd);
                 }
                 return pedido;
             }
