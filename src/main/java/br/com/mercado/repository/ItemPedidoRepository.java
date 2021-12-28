@@ -16,4 +16,5 @@ public interface ItemPedidoRepository extends JpaRepository<ItemPedido, Integer>
     @Query
             ("select ip from ItemPedido ip where ip.pedido.id = ?1 and ip.produto.id = ?2")
     public Optional<ItemPedido> acharItemPedido(Integer idPedido, Integer idProduto);
+
 }

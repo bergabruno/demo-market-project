@@ -38,7 +38,7 @@ public class ItemPedido {
     @JsonIgnore
     private Double preco;
 
-    @JsonIgnore
+
     public double getSubTotal() {
         return (preco - desconto) * quantidade;
     }

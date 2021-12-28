@@ -62,7 +62,4 @@ public class ProdutoController {
         return new ResponseEntity<List<Produto>>(produtos, HttpStatus.OK);
     }
 
-
-
-
 }

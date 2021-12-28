@@ -22,4 +22,6 @@ public interface PedidoService {
     public Pedido cancelarPedido(Integer id);
 
     public Pedido fromDTO(PedidoDTO pedidoDTO);
+
+    public Pedido tipoPagamento(Integer idPedido ,Integer tipo);
 }
