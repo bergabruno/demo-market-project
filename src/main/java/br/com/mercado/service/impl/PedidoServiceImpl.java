@@ -139,9 +139,9 @@ public class PedidoServiceImpl implements PedidoService {
             if (pedido.getItens().get(i).getProduto().getId().equals(idProduto)) {
                ItemPedido ip2 = itemPedidoRepository.acharItemPedido(pedido.getId(), idProduto).get();
                 if (sinal.equalsIgnoreCase("+")) {
-                    ip2.setQuantidade(ip2.get().getQuantidade() + quantidadeProd);
+                    ip2.setQuantidade(ip2.getQuantidade() + quantidadeProd);
                 } else {
-                    ip2.setQuantidade(ip2.get().getQuantidade() - quantidadeProd);
+                    ip2.setQuantidade(ip2.getQuantidade() - quantidadeProd);
                 }
                 return pedido;
             }
