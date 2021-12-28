@@ -38,10 +38,8 @@ public class CategoriaControllerTest {
 
     @Test
     public void deveRetornarSucesso_QuandoBuscarCategoria(){
-
         Mockito.when(this.categoriaService.buscarPorCodigo(1)).
                 thenReturn(new Categoria(1, "FERRAMENTAS"));
-
 
         RestAssuredMockMvc.given()
                 .accept(ContentType.JSON)

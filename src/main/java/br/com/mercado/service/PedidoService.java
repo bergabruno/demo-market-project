@@ -15,6 +15,8 @@ public interface PedidoService {
 
     public Pedido addProduto(Integer idPedido, String codBarras, int quantidadeProd);
 
+    public Pedido delProduto(Integer idPedido, String codBarras, int quantidadeProd);
+
     public Pedido finalizarPedido(Integer id);
 
     public Pedido cancelarPedido(Integer id);

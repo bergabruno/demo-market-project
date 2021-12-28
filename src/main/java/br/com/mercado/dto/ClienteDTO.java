@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
@@ -19,11 +20,11 @@ public class ClienteDTO {
 
     Integer id;
 
-    @NotEmpty(message = "Preenchimento obrigatorio")
+    @NotBlank
    private String nome;
 
-    @NotEmpty(message = "Preenchimento obrigatorio")
-    @Email(message = "email Invalido")
+    @NotBlank
+    @Email(message = "Email inválido")
     private String email;
 
     public ClienteDTO(Cliente cliente){

@@ -2,16 +2,20 @@ package br.com.mercado.model.entity;
 
 import br.com.mercado.model.entity.enums.StatusPedido;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -32,15 +36,17 @@ public class Pedido implements Serializable {
 
     private Integer statusPedido;
 
-    //criar status do pedido
-    //Pago - Cancelado - aberto
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private LocalDate dataPedido;
 
+    //TODO-criar pagamento do pedido
 //    private Pagamento pagamento;
 
-    public Pedido(Integer id, Cliente cliente, StatusPedido statusPedido ) {
+    public Pedido(Integer id, Cliente cliente, StatusPedido statusPedido, LocalDate dataPedido) {
         this.id = id;
         this.cliente = cliente;
         this.statusPedido = (statusPedido==null) ? null : statusPedido.getCod();
+        this.dataPedido = dataPedido;
     }
 
     public StatusPedido getStatusPedido() {

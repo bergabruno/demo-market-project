@@ -25,6 +25,7 @@ public class Cliente {
 
     private String cpf;
 
+    @Column(unique = true)
     private String email;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)

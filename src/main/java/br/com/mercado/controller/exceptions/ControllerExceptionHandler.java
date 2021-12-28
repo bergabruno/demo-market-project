@@ -16,6 +16,7 @@ import java.util.NoSuchElementException;
 @ControllerAdvice
 public class ControllerExceptionHandler {
 
+    //erro de busca por id e id informado for incorreto.
     @ExceptionHandler(ObjectNotFoundExcepction.class)
     public ResponseEntity<StandardError> objectNotFound(ObjectNotFoundExcepction e, HttpServletRequest request) {
         StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.NOT_FOUND.value(), e.getMessage(), request.getRequestURI());
@@ -28,6 +29,7 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
 
+    //tratando erro de validacoes, ex: email, NotBlank, cpf...
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<StandardError> validation(MethodArgumentNotValidException e, HttpServletRequest request) {
         ValidationError err = new ValidationError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(),  "Erro de validacao", request.getRequestURI());
@@ -39,6 +41,7 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
 
+    //quando
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<StandardError> elements(NoSuchElementException e, HttpServletRequest request){
         StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Sem valor ou com alguma letra", request.getRequestURI());

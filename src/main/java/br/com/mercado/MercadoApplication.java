@@ -9,6 +9,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 
 @SpringBootApplication
@@ -54,9 +55,9 @@ public class MercadoApplication implements CommandLineRunner {
 		p2.setCategoria(cat1);
 		p3.setCategoria(cat1);
 
-		Pedido ped1 = new Pedido(null, cliente, StatusPedido.FINALIZADO);
+		Pedido ped1 = new Pedido(null, cliente, StatusPedido.FINALIZADO, LocalDate.now());
 
-		Pedido ped2 = new Pedido(null, cliente, StatusPedido.EM_ANDAMENTO);
+		Pedido ped2 = new Pedido(null, cliente, StatusPedido.EM_ANDAMENTO,LocalDate.now());
 
 		ItemPedido ip1 = new ItemPedido(p1, ped1, 0.0, 2,p1.getValorUnitario() );
 		ItemPedido ip2 = new ItemPedido(p2, ped1, 0.0, 1, p2.getValorUnitario());

@@ -30,17 +30,14 @@ public class CategoriaController {
 
     @PostMapping
     @ApiOperation(value = "inserir categoria")
-    public ResponseEntity<Void> inserir(@Valid @RequestBody CategoriaDTO categoriaDTO){
+    public ResponseEntity<Categoria> inserir(@Valid @RequestBody CategoriaDTO categoriaDTO){
         log.info("Iniciando insercao de categoria");
 
         Categoria categoria = categoriaService.fromDTO(categoriaDTO);
         categoria = categoriaService.inserir(categoria);
 
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri()
-                .path("/buscar/{id}").buildAndExpand(categoria.getId()).toUri();
-
         log.info("Categoria criada com sucesso retornando o codigo da url para resgatar ela.");
-        return ResponseEntity.created(uri).build();
+        return new ResponseEntity<Categoria>(categoria, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -83,7 +80,7 @@ public class CategoriaController {
 
     @PutMapping("/{id}")
     @ApiOperation(value = "alterar categoria")
-    public ResponseEntity<Void> alterar(@Valid @RequestBody CategoriaDTO categoriaDTO,
+    public ResponseEntity<Categoria> alterar(@Valid @RequestBody CategoriaDTO categoriaDTO,
                                         @PathVariable Integer id){
 
         log.info("Iniciando alteracao de categoria");
@@ -93,7 +90,7 @@ public class CategoriaController {
 
         log.info("Categoria alterada com sucesso!");
         //no content = 204
-        return ResponseEntity.noContent().build();
+        return new ResponseEntity<Categoria>(categoria, HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping("/{id}")
