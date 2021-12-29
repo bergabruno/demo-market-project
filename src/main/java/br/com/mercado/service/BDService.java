@@ -6,5 +6,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface BDService {
 
-    public void iniciarBanco();
+//    public void iniciarBanco();
 }

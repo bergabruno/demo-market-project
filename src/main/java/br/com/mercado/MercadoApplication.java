@@ -27,7 +27,6 @@ public class MercadoApplication implements CommandLineRunner {
 	@Autowired
 	ProdutoRepository produtoRepository;
 
-
 	@Override
 	public void run(String... args) throws Exception {
 
