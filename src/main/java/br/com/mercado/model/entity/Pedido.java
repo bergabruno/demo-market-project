@@ -74,7 +74,7 @@ public class Pedido implements Serializable {
             soma = soma + ip.getSubTotal(); //No itemPedido, criei esse metodo que faz a soma do produto que está no momento
         }
         valorTotal = soma;
-        return soma;
+        return Math.round(soma);
     }
 
     @JsonProperty("Status do pedido:")

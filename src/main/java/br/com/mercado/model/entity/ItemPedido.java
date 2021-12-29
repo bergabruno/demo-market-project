@@ -40,7 +40,7 @@ public class ItemPedido {
 
 
     public double getSubTotal() {
-        return (preco - desconto) * quantidade;
+        return Math.round((preco - desconto) * quantidade);
     }
 
 
