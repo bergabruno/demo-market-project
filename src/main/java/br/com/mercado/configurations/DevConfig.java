@@ -21,12 +21,10 @@ public class DevConfig {
 
     @Bean
     public boolean instanciarBanco(){
-        return true;
-
-//        if("create".equalsIgnoreCase(ddl)){
-//            bdService.iniciarBanco();
-//            return true;
-//        }
-//        return false;
+        if("create".equalsIgnoreCase(ddl)){
+            bdService.iniciarBanco();
+            return true;
+        }
+        return false;
     }
 }
