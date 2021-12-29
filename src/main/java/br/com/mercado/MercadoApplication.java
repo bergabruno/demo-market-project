@@ -32,6 +32,7 @@ public class MercadoApplication implements CommandLineRunner {
 
 		categoriaRepository.deleteAll();
 		produtoRepository.deleteAll();
+
 		Categoria cat1 = new Categoria(1, "Mercearia");
 		Categoria cat2 = new Categoria(2, "Biscoitos");
 		Categoria cat3 = new Categoria(3, "Pães");
