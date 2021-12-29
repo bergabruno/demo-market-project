@@ -8,8 +8,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 @Configuration
-@Profile("dev")
-public class DevConfig {
+@Profile("prod")
+public class ProdConfig {
     //O spring entende que ele tem que rodar por conta que o profile test está ativo,
     //@Configuration - todos os @Bean da classe serao iniciados quando o profile teste estiver rodando.
 
