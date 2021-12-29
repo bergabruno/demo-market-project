@@ -8,18 +8,22 @@ import br.com.mercado.repository.PedidoRepository;
 import br.com.mercado.repository.ProdutoRepository;
 import br.com.mercado.service.BDService;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 
-@AllArgsConstructor
 @Service
 public class BDServiceImpl implements BDService {
 
+    @Autowired
     CategoriaRepository categoriaRepository;
 
+    @Autowired
     ProdutoRepository produtoRepository;
 
+    @Bean
     public void iniciarBanco(){
         Categoria cat1 = new Categoria(1, "Mercearia");
         Categoria cat2 = new Categoria(2, "Biscoitos");
