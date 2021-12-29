@@ -30,21 +30,21 @@ public class MercadoApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		Categoria cat1 = new Categoria(1, "Mercearia");
-		Categoria cat2 = new Categoria(2, "Biscoitos");
-		Categoria cat3 = new Categoria(3, "Pães");
-		Categoria cat4 = new Categoria(4, "Limpeza");
+		Categoria cat1 = new Categoria(null, "Mercearia");
+		Categoria cat2 = new Categoria(null, "Biscoitos");
+		Categoria cat3 = new Categoria(null, "Pães");
+		Categoria cat4 = new Categoria(null, "Limpeza");
 
 		//PRODUTOS DA MERCEARIA
-		Produto p1 = new Produto(1, "Farinha de trigo 1kg", "1046696",
+		Produto p1 = new Produto(null, "Farinha de trigo 1kg", "1046696",
 				"20/02/2022", 4.50);
-		Produto p2 = new Produto(2, "Feijao 1kg", "9034570",
+		Produto p2 = new Produto(null, "Feijao 1kg", "9034570",
 				"30/07/2022", 6.99);
-		Produto p3 = new Produto(3, "Açucar 1kg", "2842679",
+		Produto p3 = new Produto(null, "Açucar 1kg", "2842679",
 				"20/02/2023", 3.79);
-		Produto p4 = new Produto(4, "Arroz 1kg", "3977480",
+		Produto p4 = new Produto(null, "Arroz 1kg", "3977480",
 				"20/02/2024", 4.99);
-		Produto p5 = new Produto(5, "Arroz 5kg", "8246718",
+		Produto p5 = new Produto(null, "Arroz 5kg", "8246718",
 				"20/02/2022", 23.59);
 		p1.setCategoria(cat1);
 		p2.setCategoria(cat1);
@@ -55,15 +55,15 @@ public class MercadoApplication implements CommandLineRunner {
 		cat1.getProdutos().addAll(Arrays.asList(p1,p2,p3,p4,p5));
 
 		//PRODUTOS DO BISCOITO
-		Produto p6 = new Produto(6, "Bolacha Maizena", "9128725",
+		Produto p6 = new Produto(null, "Bolacha Maizena", "9128725",
 				"30/12/2022", 4.59);
-		Produto p7 = new Produto(7, "Bolacha Doce Negresco", "1859624",
+		Produto p7 = new Produto(null, "Bolacha Doce Negresco", "1859624",
 				"30/12/2022", 3.60);
-		Produto p8 = new Produto(8, "Bolacha Doce Trakinas", "9142836",
+		Produto p8 = new Produto(null, "Bolacha Doce Trakinas", "9142836",
 				"30/12/2022", 2.50);
-		Produto p9 = new Produto(9, "Bolacha agua e sal", "6898232",
+		Produto p9 = new Produto(null, "Bolacha agua e sal", "6898232",
 				"30/12/2022", 2.99);
-		Produto p10 = new Produto(10, "Bolacha cream cracker", "4583079",
+		Produto p10 = new Produto(null, "Bolacha cream cracker", "4583079",
 				"30/12/2022", 2.99);
 
 		p6.setCategoria(cat2);
@@ -75,15 +75,15 @@ public class MercadoApplication implements CommandLineRunner {
 		cat2.getProdutos().addAll(Arrays.asList(p6,p7,p8,p9,p10));
 
 		//PRODUTOS PAES
-		Produto p11 = new Produto(11, "Pao Pullman", "4690943",
+		Produto p11 = new Produto(null, "Pao Pullman", "4690943",
 				"30/12/2022",  9.90);
-		Produto p12 = new Produto(12, "Pao Pullman integral", "1523096",
+		Produto p12 = new Produto(null, "Pao Pullman integral", "1523096",
 				"30/12/2022",  8.79);
-		Produto p13 = new Produto(13, "Mussarela 100g", "1980854",
+		Produto p13 = new Produto(null, "Mussarela 100g", "1980854",
 				"30/12/2022",  10.90);
-		Produto p14 = new Produto(14, "Presunto 100g", "4101273",
+		Produto p14 = new Produto(null, "Presunto 100g", "4101273",
 				"30/12/2022",  6.90);
-		Produto p15 = new Produto(15, "Mortadela 100g", "8808925",
+		Produto p15 = new Produto(null, "Mortadela 100g", "8808925",
 				"30/12/2022",  5.50);
 
 		p11.setCategoria(cat3);
@@ -94,15 +94,15 @@ public class MercadoApplication implements CommandLineRunner {
 		cat3.getProdutos().addAll(Arrays.asList(p11,p12,p13,p14,p15));
 
 		//Produtos Limpeza
-		Produto p16 = new Produto(16, "Amaciante Ype", "2019707",
+		Produto p16 = new Produto(null, "Amaciante Ype", "2019707",
 				"30/12/2022",  9.90);
-		Produto p17 = new Produto(17, "Agua sanitaria", "7328132",
+		Produto p17 = new Produto(null, "Agua sanitaria", "7328132",
 				"30/12/2022",  5.99);
-		Produto p18 = new Produto(18, "Detergente", "1495987",
+		Produto p18 = new Produto(null, "Detergente", "1495987",
 				"30/12/2022",  3.50);
-		Produto p19 = new Produto(19, "Esponja (1 unid)", "3238276",
+		Produto p19 = new Produto(null, "Esponja (1 unid)", "3238276",
 				"30/12/2022",  2.50);
-		Produto p20 = new Produto(20, "Sabao em po", "8944285",
+		Produto p20 = new Produto(null, "Sabao em po", "8944285",
 				"30/12/2022",  23.90);
 
 		p16.setCategoria(cat4);
