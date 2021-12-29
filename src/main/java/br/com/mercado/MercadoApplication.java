@@ -55,7 +55,6 @@ public class MercadoApplication implements CommandLineRunner {
 		p4.setCategoria(cat1);
 		p5.setCategoria(cat1);
 
-		cat1.getProdutos().addAll(Arrays.asList(p1,p2,p3,p4,p5));
 
 		//PRODUTOS DO BISCOITO
 		Produto p6 = new Produto(6, "Bolacha Maizena", "9128725",
@@ -75,8 +74,6 @@ public class MercadoApplication implements CommandLineRunner {
 		p9.setCategoria(cat2);
 		p10.setCategoria(cat2);
 
-		cat2.getProdutos().addAll(Arrays.asList(p6,p7,p8,p9,p10));
-
 		//PRODUTOS PAES
 		Produto p11 = new Produto(11, "Pao Pullman", "4690943",
 				"30/12/2022",  9.90);
@@ -94,7 +91,6 @@ public class MercadoApplication implements CommandLineRunner {
 		p13.setCategoria(cat3);
 		p14.setCategoria(cat3);
 		p15.setCategoria(cat3);
-		cat3.getProdutos().addAll(Arrays.asList(p11,p12,p13,p14,p15));
 
 		//Produtos Limpeza
 		Produto p16 = new Produto(16, "Amaciante Ype", "2019707",
@@ -113,7 +109,6 @@ public class MercadoApplication implements CommandLineRunner {
 		p18.setCategoria(cat4);
 		p19.setCategoria(cat4);
 		p20.setCategoria(cat4);
-		cat4.getProdutos().addAll(Arrays.asList(p16,p17,p18,p19,p20));
 
 		//categoria ja cria os porodutos pois categoria TEM produtos
 		categoriaRepository.saveAll(Arrays.asList(cat1,cat2,cat3,cat4));
