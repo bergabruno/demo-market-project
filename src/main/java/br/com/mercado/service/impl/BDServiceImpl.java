@@ -23,7 +23,6 @@ public class BDServiceImpl implements BDService {
     @Autowired
     ProdutoRepository produtoRepository;
 
-    @Bean
     public void iniciarBanco(){
         Categoria cat1 = new Categoria(1, "Mercearia");
         Categoria cat2 = new Categoria(2, "Biscoitos");
