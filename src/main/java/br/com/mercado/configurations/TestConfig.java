@@ -18,7 +18,7 @@ public class TestConfig {
 
     @Bean
     public boolean instanciarBanco(){
-        bdService.iniciarBanco();
+//        bdService.iniciarBanco();
         return true;
     }
 }
