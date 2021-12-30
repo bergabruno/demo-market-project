@@ -30,25 +30,25 @@ public class MercadoApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 
-		categoriaRepository.deleteAll();
-		produtoRepository.deleteAll();
-
-		Categoria cat1 = new Categoria(1, "Mercearia");
-//		Categoria cat2 = new Categoria(2, "Biscoitos");
-//		Categoria cat3 = new Categoria(3, "Pães");
-//		Categoria cat4 = new Categoria(4, "Limpeza");
-
-		//PRODUTOS DA MERCEARIA
-		Produto p1 = new Produto(1, "Farinha de trigo 1kg", "1046696",
-				"20/02/2022", 4.50, Arrays.asList(cat1));
-		Produto p2 = new Produto(2, "Feijao 1kg", "9034570",
-				"30/07/2022", 6.99, Arrays.asList(cat1));
-		Produto p3 = new Produto(3, "Açucar 1kg", "2842679",
-				"20/02/2023", 3.79, Arrays.asList(cat1));
-		Produto p4 = new Produto(4, "Arroz 1kg", "3977480",
-				"20/02/2024", 4.99, Arrays.asList(cat1));
-		Produto p5 = new Produto(5, "Arroz 5kg", "8246718",
-				"20/02/2022", 23.59, Arrays.asList(cat1));
+//		categoriaRepository.deleteAll();
+//		produtoRepository.deleteAll();
+//
+//		Categoria cat1 = new Categoria(1, "Mercearia");
+////		Categoria cat2 = new Categoria(2, "Biscoitos");
+////		Categoria cat3 = new Categoria(3, "Pães");
+////		Categoria cat4 = new Categoria(4, "Limpeza");
+//
+//		//PRODUTOS DA MERCEARIA
+//		Produto p1 = new Produto(1, "Farinha 1kg", "1046696",
+//				"20/02/2022", 4.50, Arrays.asList(cat1));
+//		Produto p2 = new Produto(2, "Feijao 1kg", "9034570",
+//				"30/07/2022", 6.99, Arrays.asList(cat1));
+//		Produto p3 = new Produto(3, "Açucar 1kg", "2842679",
+//				"20/02/2023", 3.79, Arrays.asList(cat1));
+//		Produto p4 = new Produto(4, "Arroz 1kg", "3977480",
+//				"20/02/2024", 4.99, Arrays.asList(cat1));
+//		Produto p5 = new Produto(5, "Arroz 5kg", "8246718",
+//				"20/02/2022", 23.59, Arrays.asList(cat1));
 
 //		//PRODUTOS DO BISCOITO
 //		Produto p6 = new Produto(6, "Bolacha Maizena", "9128725",
@@ -87,8 +87,8 @@ public class MercadoApplication implements CommandLineRunner {
 //				"30/12/2022",  23.90, Arrays.asList(cat4));
 
 		//categoria ja cria os porodutos pois categoria TEM produtos
-		categoriaRepository.deleteAll();
-		produtoRepository.saveAll(Arrays.asList(p1,p2,p3,p4,p5));
+//		categoriaRepository.deleteAll();
+//		produtoRepository.saveAll(Arrays.asList(p1,p2,p3,p4,p5));
 
 		//,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16,
 		//				p17,p18,p19,p20
