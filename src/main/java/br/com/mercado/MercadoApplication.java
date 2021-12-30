@@ -111,9 +111,9 @@ public class MercadoApplication implements CommandLineRunner {
 		p20.setCategoria(cat4);
 
 		//categoria ja cria os porodutos pois categoria TEM produtos
-//		categoriaRepository.saveAll(Arrays.asList(cat1,cat2,cat3,cat4));
-		produtoRepository.saveAll(Arrays.asList(p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16,
-				p17,p18,p19,p20));
+		categoriaRepository.saveAll(Arrays.asList(cat1,cat2,cat3,cat4));
+//		produtoRepository.saveAll(Arrays.asList(p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16,
+//				p17,p18,p19,p20));
 
 	}
 }
