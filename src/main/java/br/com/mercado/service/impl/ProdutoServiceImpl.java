@@ -6,6 +6,7 @@ import br.com.mercado.model.entity.Produto;
 import br.com.mercado.repository.ProdutoRepository;
 import br.com.mercado.service.CategoriaService;
 import br.com.mercado.service.ProdutoService;
+import br.com.mercado.service.exceptions.DataIntegrityException;
 import br.com.mercado.service.exceptions.ObjectNotFoundExcepction;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,8 +24,9 @@ public class ProdutoServiceImpl implements ProdutoService {
     private CategoriaService categoriaService;
 
     public void inserir(Produto produto){
-        if(produto == null)
-            throw new RuntimeException("Produto incompleto");
+       if(produtoRepository.existsByCodBarras(produto.getCodBarras()))
+           throw new DataIntegrityException("Já existe um produto com este codigo de barras!");
+
         produtoRepository.save(produto);
     }
 

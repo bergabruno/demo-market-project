@@ -27,7 +27,7 @@ public class ProdutoController {
 
     @PostMapping
     @ApiOperation(value = "insere um produto no banco")
-    public ResponseEntity<ProdutoNewDTO> inserir(@Valid @RequestBody ProdutoNewDTO produtoNewDTO){
+    public ResponseEntity<Produto> inserir(@Valid @RequestBody ProdutoNewDTO produtoNewDTO){
         log.info("Iniciando a insercao do produto");
 
         Produto produto = produtoService.fromDTO(produtoNewDTO);
@@ -35,7 +35,7 @@ public class ProdutoController {
         produtoService.inserir(produto);
 
         log.info("insercao feita com sucesso do produto!");
-        return new ResponseEntity<ProdutoNewDTO>(produtoNewDTO, HttpStatus.CREATED);
+        return new ResponseEntity<Produto>(produto, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -61,8 +61,5 @@ public class ProdutoController {
 
         return new ResponseEntity<List<Produto>>(produtos, HttpStatus.OK);
     }
-
-
-
 
 }

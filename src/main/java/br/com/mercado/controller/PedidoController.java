@@ -63,7 +63,7 @@ public class PedidoController {
     }
 
     @PostMapping("/deletar-produto/{idPedido}/{codBarras}")
-    @ApiOperation(value = "Adicionar produto ao pedido")
+    @ApiOperation(value = "deletar um produto do pedido")
     public ResponseEntity<Pedido> delProduto(
             @PathVariable Integer idPedido, @PathVariable String codBarras,
             @RequestParam(defaultValue = "1") int quantidadeProd) {
@@ -94,6 +94,19 @@ public class PedidoController {
         Pedido pedido = pedidoService.cancelarPedido(id);
 
         log.info("altercao do status do pedido feita com sucesso!");
+
+        return ResponseEntity.ok(pedido);
+    }
+
+
+    @PutMapping("/alterar-pagamento/{id}")
+    @ApiOperation(value = "mudar o status do pagamento do pedido")
+    public ResponseEntity<Pedido> alterarPagamento(@PathVariable Integer id, @RequestParam(defaultValue = "4") Integer status) {
+        log.info("Iniciando a alteracao do status do pagamento do pedido");
+
+        Pedido pedido = pedidoService.tipoPagamento(id,status);
+
+        log.info("altercao do status do pagamento do pedido feita com sucesso!");
 
         return ResponseEntity.ok(pedido);
     }

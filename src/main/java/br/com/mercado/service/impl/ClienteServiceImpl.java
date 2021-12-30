@@ -35,7 +35,7 @@ public class ClienteServiceImpl implements ClienteService {
 
     public Cliente buscarPorCodigo(Integer id){
         Optional<Cliente> cliente = clienteRepository.findById(id);
-        return cliente.orElseThrow(() -> new ObjectNotFoundExcepction("Erro ao encontrar por este codigo!"));
+        return cliente.orElseThrow(() -> new ObjectNotFoundExcepction("Erro ao encontrar cliente por este codigo!"));
     }
 
     public List<Cliente> obterTodos(){
