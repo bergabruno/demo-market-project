@@ -49,6 +49,7 @@ public class MercadoApplication implements CommandLineRunner {
 				"20/02/2024", 4.99);
 		Produto p5 = new Produto(5, "Arroz 5kg", "8246718",
 				"20/02/2022", 23.59);
+
 		p1.setCategoria(cat1);
 		p2.setCategoria(cat1);
 		p3.setCategoria(cat1);
@@ -111,6 +112,7 @@ public class MercadoApplication implements CommandLineRunner {
 		p20.setCategoria(cat4);
 
 		//categoria ja cria os porodutos pois categoria TEM produtos
+		categoriaRepository.deleteAll();
 		categoriaRepository.saveAll(Arrays.asList(cat1,cat2,cat3,cat4));
 		produtoRepository.saveAll(Arrays.asList(p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16,
 				p17,p18,p19,p20));
