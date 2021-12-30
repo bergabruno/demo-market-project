@@ -32,7 +32,7 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     public Categoria buscarPorCodigo(Integer id){
         Optional<Categoria> categoria = categoriaRepository.findById(id);
-        return categoria.orElseThrow(() -> new ObjectNotFoundExcepction("Erro ao encontrar por este codigo!"));
+        return categoria.orElseThrow(() -> new ObjectNotFoundExcepction("Erro ao encontrar categoria por este codigo!"));
     }
 
     public List<Categoria> obterTodos(){
