@@ -29,8 +29,7 @@ public class BasicSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String [] PUBLIC_MATCHERS_POST = {
             "/api/v1/pedidos/**",
-            "/api/v1/clientes/**",
-            "/api/v1/admin/**"
+            "/api/v1/clientes/**"
     };
 
     private static final String [] PUBLIC_MATCHERS_PUT = {
