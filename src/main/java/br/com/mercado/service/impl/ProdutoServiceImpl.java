@@ -53,12 +53,10 @@ public class ProdutoServiceImpl implements ProdutoService {
     public List<Produto> listarTodos() {
         List<Produto> lista = produtoRepository.findAll();
 
-        if(lista.isEmpty()){
+        if(lista.isEmpty())
             throw new ObjectNotFoundExcepction("Nao existe nenhum produto!!!");
-        }
 
         return lista;
     }
-
 
 }

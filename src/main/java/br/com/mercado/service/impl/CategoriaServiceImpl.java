@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 public class CategoriaServiceImpl implements CategoriaService {
 
     @Autowired
-    CategoriaRepository categoriaRepository;
+    private CategoriaRepository categoriaRepository;
 
     private final Logger log = Logger.getLogger("br.com.mercado.service.impl.CategoriaController");
 

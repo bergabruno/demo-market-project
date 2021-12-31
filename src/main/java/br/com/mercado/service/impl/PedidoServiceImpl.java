@@ -67,28 +67,24 @@ public class PedidoServiceImpl implements PedidoService {
 
         Pedido pedido = buscarPorCodigo(idPedido);
 
-        if (!pedido.getStatusPedido().equals(StatusPedido.EM_ANDAMENTO))
-            throw new RuntimeException("Nao é possivel inserir um produto em um pedido que nao está em andamento");
-
-        if (produtoRepository.findByCodBarras(codBarras).isEmpty())
+        if (!produtoRepository.existsByCodBarras(codBarras))
             throw new ObjectNotFoundExcepction("Nao existe nenhum produto com este cod de barras");
 
         if (pedido.getStatusPedido().getCod() != 3)
             throw new RuntimeException("Nao é possivel inserir produtos em um pedido finalizado/cancelado!");
 
-        Optional<Produto> produto = produtoRepository.findByCodBarras(codBarras);
+        Produto produto = produtoRepository.findByCodBarras(codBarras).get();
 
-        //fazendo a soma do produto caso ja tenha esse produto
-        Pedido pedidoSomado = somarOuSubtrairProd(pedido, produto.get().getId(), quantidadeProd, "+");
-
-        if (pedidoSomado != null) {
+//        fazendo a soma do produto caso ja tenha esse produto
+        Pedido pedidoSomado = somarOuSubtrairProd(pedido, produto.getId(), quantidadeProd, "+");
+        if (pedidoSomado != null)
             return pedidoSomado;
-        }
 
-        ItemPedido ip = new ItemPedido(produto.get(), pedido, 0.0, quantidadeProd, produto.get().getValorUnitario());
+
+        ItemPedido ip = new ItemPedido(produto, pedido, 0.0, quantidadeProd, produto.getValorUnitario());
 
         pedido.getItens().add(ip);
-        produto.get().getItens().add(ip);
+        produto.getItens().add(ip);
 
         return pedido;
     }
@@ -96,13 +92,11 @@ public class PedidoServiceImpl implements PedidoService {
     public Pedido delProduto(Integer idPedido, String codBarras, int quantidadeProd) {
         Pedido pedido = buscarPorCodigo(idPedido);
 
-        Optional<Produto> produto = produtoRepository.findByCodBarras(codBarras);
+        Produto produto = produtoRepository.findByCodBarras(codBarras).get();
 
-        Pedido pedidoSomado = somarOuSubtrairProd(pedido, produto.get().getId(), quantidadeProd, "-");
-
-        if (pedidoSomado != null) {
+        Pedido pedidoSomado = somarOuSubtrairProd(pedido, produto.getId(), quantidadeProd, "-");
+        if (pedidoSomado != null)
             return pedidoSomado;
-        }
 
         throw new ObjectNotFoundExcepction("Nao foi encontrado nenhum produto com este codigo de barras no pedido!");
     }
