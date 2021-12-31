@@ -61,7 +61,7 @@ public class ClienteController {
 
     @PutMapping("/{id}")
     @ApiOperation(value = "alterar um cliente pelo id")
-    public ResponseEntity<Void> alterar(@Valid @RequestBody ClienteDTO clienteDTO,
+    public ResponseEntity<Cliente> alterar(@Valid @RequestBody ClienteDTO clienteDTO,
                                         @PathVariable Integer id){
         log.info("Iniciando alteracao de cliente");
 
@@ -70,7 +70,7 @@ public class ClienteController {
         cliente = clienteService.alterar(cliente);
 
         log.info("alteracao feita com sucesso");
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(cliente);
     }
 
     @DeleteMapping("/{id}")

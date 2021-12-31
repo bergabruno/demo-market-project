@@ -62,7 +62,7 @@ public class PedidoController {
         return new ResponseEntity<Pedido>(pedido, HttpStatus.CREATED);
     }
 
-    @PostMapping("/deletar-produto/{idPedido}/{codBarras}")
+    @PutMapping("/deletar-produto/{idPedido}/{codBarras}")
     @ApiOperation(value = "deletar um produto do pedido")
     public ResponseEntity<Pedido> delProduto(
             @PathVariable Integer idPedido, @PathVariable String codBarras,
@@ -97,7 +97,6 @@ public class PedidoController {
 
         return ResponseEntity.ok(pedido);
     }
-
 
     @PutMapping("/alterar-pagamento/{id}")
     @ApiOperation(value = "mudar o status do pagamento do pedido")

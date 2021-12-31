@@ -1,27 +1,27 @@
 package br.com.mercado.service.impl;
 
+import br.com.mercado.model.entity.Admin;
 import br.com.mercado.model.entity.Categoria;
 import br.com.mercado.model.entity.Produto;
-import br.com.mercado.repository.CategoriaRepository;
-import br.com.mercado.repository.ClienteRepository;
-import br.com.mercado.repository.PedidoRepository;
-import br.com.mercado.repository.ProdutoRepository;
+import br.com.mercado.repository.*;
 import br.com.mercado.service.BDService;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 
 @Service
+@AllArgsConstructor
 public class BDServiceImpl implements BDService {
 
-    @Autowired
-    CategoriaRepository categoriaRepository;
+    private CategoriaRepository categoriaRepository;
 
-    @Autowired
-    ProdutoRepository produtoRepository;
+    private ProdutoRepository produtoRepository;
+
+    private BCryptPasswordEncoder pw;
+
+    private AdminRepository adminRepository;
 
     public void iniciarBanco(){
         Categoria cat1 = new Categoria(1, "Mercearia");
@@ -105,6 +105,10 @@ public class BDServiceImpl implements BDService {
         p19.setCategoria(cat4);
         p20.setCategoria(cat4);
         cat4.getProdutos().addAll(Arrays.asList(p16,p17,p18,p19,p20));
+
+        Admin admin = new Admin(null, "admin", pw.encode("admin"));
+
+        adminRepository.save(admin);
 
         //categoria ja cria os porodutos pois categoria TEM produtos
         categoriaRepository.saveAll(Arrays.asList(cat1,cat2,cat3,cat4));

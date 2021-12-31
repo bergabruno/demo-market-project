@@ -80,17 +80,18 @@ public class CategoriaController {
 
     @PutMapping("/{id}")
     @ApiOperation(value = "alterar categoria")
-    public ResponseEntity<Categoria> alterar(@Valid @RequestBody CategoriaDTO categoriaDTO,
+    public ResponseEntity<CategoriaDTO> alterar(@Valid @RequestBody CategoriaDTO categoriaDTO,
                                         @PathVariable Integer id){
 
         log.info("Iniciando alteracao de categoria");
         Categoria categoria = categoriaService.fromDTO(categoriaDTO);
         categoria.setId(id);
+        categoriaDTO.setId(id);
         categoria = categoriaService.alterar(categoria);
 
         log.info("Categoria alterada com sucesso!");
         //no content = 204
-        return new ResponseEntity<Categoria>(categoria, HttpStatus.NO_CONTENT);
+        return new ResponseEntity<CategoriaDTO>(categoriaDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

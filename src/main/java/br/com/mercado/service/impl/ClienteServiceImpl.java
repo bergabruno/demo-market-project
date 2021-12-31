@@ -10,7 +10,6 @@ import br.com.mercado.service.exceptions.NegocioException;
 import br.com.mercado.service.exceptions.ObjectNotFoundExcepction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +18,7 @@ import java.util.Optional;
 public class ClienteServiceImpl implements ClienteService {
 
     @Autowired
-    ClienteRepository clienteRepository;
+    private ClienteRepository clienteRepository;
 
     public Cliente inserir(Cliente cliente){
         cliente.setId(null);
@@ -47,19 +46,14 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     public Cliente alterar(Cliente cliente){
-        if(!clienteRepository.existsById(cliente.getId()))
-            throw new ObjectNotFoundExcepction("Nao existe nenhum cliente com este ID!");
-
         Cliente newCliente = buscarPorCodigo(cliente.getId());
         updateData(newCliente, cliente);
         return clienteRepository.save(newCliente);
     }
 
     public void deletar(Integer id){
-        if(!clienteRepository.existsById(id))
-            throw new ObjectNotFoundExcepction("Nao existe nenhum cliente com este ID!");
-
         Cliente cliente = buscarPorCodigo(id);
+
         if(!cliente.getPedidos().isEmpty())
             throw new DataIntegrityException("Nao é possivel excluir um cliente com pedidos!");
 

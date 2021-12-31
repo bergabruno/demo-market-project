@@ -1,4 +1,4 @@
-package br.com.mercado.configurations;
+package br.com.mercado.configurations.profiles;
 
 import br.com.mercado.service.BDService;
 import org.springframework.beans.factory.annotation.Autowired;
