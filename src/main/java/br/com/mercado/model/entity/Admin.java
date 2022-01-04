@@ -15,7 +15,6 @@ import javax.persistence.Id;
 @Getter
 @Setter
 @Entity
-@AllArgsConstructor
 @NoArgsConstructor
 public class Admin {
 
@@ -27,7 +26,6 @@ public class Admin {
 
     private String senha;
 
-    private String token;
 
     public Admin(Integer id, String login, String senha) {
         this.id = id;

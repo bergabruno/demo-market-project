@@ -1,7 +1,6 @@
 package br.com.mercado.configurations.profiles;
 
 import br.com.mercado.service.BDService;
-import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

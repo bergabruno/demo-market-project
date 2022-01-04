@@ -64,6 +64,9 @@ public class Produto implements Serializable {
         if(categorias == null){
             categorias = new ArrayList<>();
         }
+        if(categoria.getNome() == null){
+            throw new RuntimeException("Insira um nome a categoria!");
+        }
         categorias.add(categoria);
     }
 }

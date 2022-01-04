@@ -6,6 +6,7 @@ import br.com.mercado.service.CategoriaService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,14 +31,15 @@ public class CategoriaController {
 
     @PostMapping
     @ApiOperation(value = "inserir categoria")
-    public ResponseEntity<Categoria> inserir(@Valid @RequestBody CategoriaDTO categoriaDTO){
+    public ResponseEntity<CategoriaDTO> inserir(@Valid @RequestBody CategoriaDTO categoriaDTO){
         log.info("Iniciando insercao de categoria");
 
         Categoria categoria = categoriaService.fromDTO(categoriaDTO);
         categoria = categoriaService.inserir(categoria);
+        categoriaDTO.setId(categoria.getId()); //tirar no teste
 
         log.info("Categoria criada com sucesso retornando o codigo da url para resgatar ela.");
-        return new ResponseEntity<Categoria>(categoria, HttpStatus.CREATED);
+        return new ResponseEntity<CategoriaDTO>(categoriaDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

@@ -63,7 +63,7 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<StandardError> URLErrada(HttpRequestMethodNotSupportedException e, HttpServletRequest request){
-        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.METHOD_NOT_ALLOWED.value(), "Ops, voce digitou uma URL que nao existe!", request.getRequestURI());
+        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.METHOD_NOT_ALLOWED.value(), "Ops, esse metodo para esta URL nao está disponivel!", request.getRequestURI());
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(err);
     }
 

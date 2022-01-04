@@ -55,8 +55,8 @@ public class BasicSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.GET,PUBLIC_MATCHERS_GET).permitAll()
                 .antMatchers(HttpMethod.POST,PUBLIC_MATCHERS_POST).permitAll()
                 .antMatchers(HttpMethod.PUT, PUBLIC_MATCHERS_PUT).permitAll()
-//                .antMatchers("/api/v1/**").permitAll()
                 .antMatchers(PUBLIC_MATCHERS_SWAGGER).permitAll()
+                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
                 .and().httpBasic()
                 .and().sessionManagement()
@@ -67,22 +67,19 @@ public class BasicSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
         auth.userDetailsService(userDetailsService);
     }
 
-//    @Bean
-//    CorsConfigurationSource corsConfigurationSource(){
-//        final UrlBasedCorsConfigurationSource sourse = new UrlBasedCorsConfigurationSource();
-//        sourse.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
-//        return sourse;
-//    }
+    @Bean
+    CorsConfigurationSource corsConfigurationSource(){
+        final UrlBasedCorsConfigurationSource sourse = new UrlBasedCorsConfigurationSource();
+        sourse.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+        return sourse;
+    }
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder(){
         return new BCryptPasswordEncoder();
     }
 
-    //      .antMatchers(HttpMethod.GET,"api/v1/clientes").denyAll()
-//                .antMatchers(HttpMethod.POST,"api/v1/clientes").permitAll()
 }

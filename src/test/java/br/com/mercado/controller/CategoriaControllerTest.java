@@ -1,49 +1,68 @@
 package br.com.mercado.controller;
 
 import br.com.mercado.dto.CategoriaDTO;
-import br.com.mercado.model.entity.Categoria;
-import br.com.mercado.repository.CategoriaRepository;
 import br.com.mercado.service.CategoriaService;
-import io.restassured.http.ContentType;
-import io.restassured.module.mockmvc.RestAssuredMockMvc;
-import org.junit.jupiter.api.BeforeEach;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.Mockito;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import javax.print.attribute.standard.Media;
 
-@WebMvcTest
+@SpringBootTest
+@ExtendWith(SpringExtension.class)
+@AutoConfigureMockMvc
+@EnableWebMvc
+//@WebMvcTest ??
 public class CategoriaControllerTest {
 
     @Autowired
-    private CategoriaController categoriaController;
+    MockMvc mvc;
 
     @MockBean
-    private CategoriaService categoriaService;
+    CategoriaService categoriaService;
 
-//    @MockBean
-//    private CategoriaRepository categoriaRepository;
-
-
-    @BeforeEach
-    public void setup(){
-        //apenas setando para injetar somente esse controller e nao todos.
-        RestAssuredMockMvc.standaloneSetup(this.categoriaController);
-    }
-
+    static String categoria_API = "/api/v1/categorias";
 
     @Test
-    public void deveRetornarSucesso_QuandoBuscarCategoria(){
-        Mockito.when(this.categoriaService.buscarPorCodigo(1)).
-                thenReturn(new Categoria(1, "FERRAMENTAS"));
+    @DisplayName("deve criar uma categoria com sucesso")
+    public void deveCriarCategoria() throws Exception{
 
-        RestAssuredMockMvc.given()
-                .accept(ContentType.JSON)
-                .when().get("api/v1/categorias/{id}", 1)
-                .then().statusCode(HttpStatus.OK.value());
+        CategoriaDTO categoriaDTO = new CategoriaDTO();
+
+        categoriaDTO.setId(1);
+        categoriaDTO.setNome("testeeee");
+
+        String json = new ObjectMapper().writeValueAsString(categoriaDTO);
+
+        MockHttpServletRequestBuilder request =  MockMvcRequestBuilders
+                .post(categoria_API)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("id").isNotEmpty())
+                .andExpect(MockMvcResultMatchers.jsonPath("nome").value(categoriaDTO.getNome())) ;
     }
+
+//    @Test
+//    @DisplayName("nao deve criar uma categoria")
+//    public void deveCriarCategoriaInvalida(){
+//
+//
+//    }
 }
