@@ -36,9 +36,11 @@ public class CategoriaController {
 
         Categoria categoria = categoriaService.fromDTO(categoriaDTO);
         categoria = categoriaService.inserir(categoria);
+        log.info("Iniciando insercao de categoria? " + categoria.getId());
+
         categoriaDTO.setId(categoria.getId()); //tirar no teste
 
-        log.info("Categoria criada com sucesso retornando o codigo da url para resgatar ela.");
+        log.info("Categoria criada com sucesso retornando o objeto no corpo.");
         return new ResponseEntity<CategoriaDTO>(categoriaDTO, HttpStatus.CREATED);
     }
 

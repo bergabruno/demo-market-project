@@ -25,11 +25,9 @@ public class CategoriaServiceImpl implements CategoriaService {
     private final Logger log = Logger.getLogger("br.com.mercado.service.impl.CategoriaController");
 
     public Categoria inserir(Categoria categoria){
-        categoria.setId(null);
         if(categoriaRepository.existsByNome(categoria.getNome()))
             throw new DataIntegrityException("Já existe uma categoria com este nome!");
-        categoriaRepository.save(categoria);
-        return categoria;
+        return categoriaRepository.save(categoria);
     }
 
     public Categoria buscarPorCodigo(Integer id){
