@@ -1,4 +1,4 @@
-package br.com.mercado.controller.exceptions;
+package br.com.mercado.exceptions;
 
 import br.com.mercado.service.exceptions.DataIntegrityException;
 import br.com.mercado.service.exceptions.NegocioException;

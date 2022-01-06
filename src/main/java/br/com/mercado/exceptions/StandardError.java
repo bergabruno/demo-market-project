@@ -1,9 +1,7 @@
-package br.com.mercado.controller.exceptions;
+package br.com.mercado.exceptions;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 @AllArgsConstructor

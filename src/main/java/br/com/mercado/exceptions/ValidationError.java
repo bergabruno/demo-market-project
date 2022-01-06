@@ -1,4 +1,4 @@
-package br.com.mercado.controller.exceptions;
+package br.com.mercado.exceptions;
 
 import lombok.Getter;
 import lombok.Setter;
