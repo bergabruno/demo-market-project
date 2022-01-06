@@ -15,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @Getter@Setter
 public class Categoria {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

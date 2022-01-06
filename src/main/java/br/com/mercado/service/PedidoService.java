@@ -5,8 +5,6 @@ import br.com.mercado.model.entity.Pedido;
 
 import org.springframework.stereotype.Service;
 
-
-@Service
 public interface PedidoService {
 
     public Pedido buscarPorCodigo(Integer id);

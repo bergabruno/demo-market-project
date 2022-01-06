@@ -3,6 +3,7 @@ package br.com.mercado.service.impl;
 import br.com.mercado.dto.AdminNewDTO;
 import br.com.mercado.model.entity.Admin;
 import br.com.mercado.model.entity.Admin;
+import br.com.mercado.model.entity.AdminLogin;
 import br.com.mercado.repository.AdminRepository;
 import br.com.mercado.service.AdminService;
 import br.com.mercado.service.exceptions.DataIntegrityException;
@@ -29,32 +30,27 @@ public class AdminServiceImpl implements AdminService {
         if(adminRepository.existsByLogin(admin.getLogin()))
             throw new DataIntegrityException("Ja existe um Login com esses caracteres");
 
-        admin = adminRepository.save(admin);
+        adminRepository.save(admin);
         return admin;
     }
 
-    public Admin fromDTO(AdminNewDTO adminDTO) {
-        return new Admin(null, adminDTO.getLogin(), pw.encode(adminDTO.getSenha()));
-    }
-
     @Override
-    public Optional<Admin> logar(Optional<Admin> admin) {
+    public Optional<AdminLogin> logar(Optional<AdminLogin> admin) {
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        Optional<Admin> admin2 = adminRepository.findByLogin(admin.get().getLogin());
+        Optional<Admin> adminBancoDados = adminRepository.findByLogin(admin.get().getLogin());
 
-        if (admin2.isPresent()) {
-            if (encoder.matches(admin.get().getSenha(), admin2.get().getSenha())) {
+        if (adminBancoDados.isPresent()) {
+            if (encoder.matches(admin.get().getSenha(), adminBancoDados.get().getSenha())) {
                 String auth = admin.get().getLogin() + ":" + admin.get().getSenha();
 
                 byte[] encondedAuth = Base64.encodeBase64(auth.getBytes(StandardCharsets.UTF_8));
                 String authHeader = "Basic " + new String(encondedAuth);
 
-                admin.get().setSenha(admin2.get().getSenha());
+                admin.get().setSenha(adminBancoDados.get().getSenha());
                 admin.get().setToken(authHeader);
-                admin.get().setLogin(admin2.get().getLogin());
-                admin.get().setId(admin2.get().getId());
+                admin.get().setLogin(adminBancoDados.get().getLogin());
                 return admin;
             }
         } else {
@@ -62,5 +58,9 @@ public class AdminServiceImpl implements AdminService {
         }
         throw new RuntimeException("Senha Incorreta");
 
+    }
+
+    public Admin fromDTO(AdminNewDTO adminDTO) {
+        return new Admin(null, adminDTO.getLogin(), pw.encode(adminDTO.getSenha()));
     }
 }
