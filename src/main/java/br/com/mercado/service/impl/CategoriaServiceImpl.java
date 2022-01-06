@@ -27,7 +27,8 @@ public class CategoriaServiceImpl implements CategoriaService {
     public Categoria inserir(Categoria categoria){
         if(categoriaRepository.existsByNome(categoria.getNome()))
             throw new DataIntegrityException("Já existe uma categoria com este nome!");
-        return categoriaRepository.save(categoria);
+        categoria =  categoriaRepository.save(categoria);
+        return categoria;
     }
 
     public Categoria buscarPorCodigo(Integer id){

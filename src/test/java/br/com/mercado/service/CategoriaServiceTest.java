@@ -26,12 +26,13 @@ public class CategoriaServiceTest {
     @Autowired
     CategoriaRepository categoriaRepository;
 
-
     @Test
     @DisplayName("Deve salvar uma categoria")
     public void deveSalvarCategoria(){
         Categoria categoria = new Categoria();
         categoria.setNome("Almoxarifado");
+
+        //REVER - MOCKITO.WHEN
         Mockito.when(categoriaRepository.save(categoria))
                 .thenReturn(new Categoria(1, "Almoxarifado"));
 

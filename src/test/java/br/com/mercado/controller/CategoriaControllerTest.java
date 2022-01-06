@@ -3,7 +3,6 @@ package br.com.mercado.controller;
 import br.com.mercado.dto.CategoriaDTO;
 import br.com.mercado.model.entity.Categoria;
 import br.com.mercado.repository.CategoriaRepository;
-import br.com.mercado.service.CategoriaService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,7 +11,6 @@ import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -23,7 +21,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
-import javax.print.attribute.standard.Media;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
@@ -45,10 +42,11 @@ public class CategoriaControllerTest {
     public void deveCriarCategoria() throws Exception{
         CategoriaDTO categoriaDTO = new CategoriaDTO();
         categoriaDTO.setId(1);
-        categoriaDTO.setNome("fdsfsdfds");
+        categoriaDTO.setNome("Almoxarifado");
 
         Categoria saveCat = new Categoria(1 ,categoriaDTO.getNome());
 
+        //REVER - GIVEN
         BDDMockito.given(categoriaRepository.save(Mockito.any(Categoria.class))).willReturn(saveCat);
 
         String json = new ObjectMapper().writeValueAsString(categoriaDTO);

@@ -15,9 +15,9 @@ public class TestConfig {
     @Autowired
     BDService bdService;
 
-    @Bean
-    public boolean instanciarBanco(){
-        bdService.iniciarBanco();
-        return true;
-    }
+//    @Bean
+//    public boolean instanciarBanco(){
+//        bdService.iniciarBanco();
+//        return true;
+//    }
 }
