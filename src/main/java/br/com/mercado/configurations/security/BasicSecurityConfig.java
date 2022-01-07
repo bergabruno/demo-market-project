@@ -46,7 +46,8 @@ public class BasicSecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/**",
             "/swagger-ui/**",
             "/swagger-ui/index.html#",
-            "/v3/api-docs"
+            "/v3/api-docs",
+            "/v2/api-docs"
     };
 
     @Override
@@ -56,7 +57,7 @@ public class BasicSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,PUBLIC_MATCHERS_POST).permitAll()
                 .antMatchers(HttpMethod.PUT, PUBLIC_MATCHERS_PUT).permitAll()
                 .antMatchers(PUBLIC_MATCHERS_SWAGGER).permitAll()
-//                .antMatchers("/**").permitAll()
+                .antMatchers("/**").permitAll()
                 //para rodar o teste do controller, liberar aqui
                 .anyRequest().authenticated()
                 .and().httpBasic()
