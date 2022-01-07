@@ -4,10 +4,8 @@ import br.com.mercado.dto.ProdutoDTO;
 import br.com.mercado.dto.ProdutoNewDTO;
 import br.com.mercado.model.entity.Categoria;
 import br.com.mercado.model.entity.Produto;
-import br.com.mercado.model.entity.Produto;
 import br.com.mercado.repository.ProdutoRepository;
 import br.com.mercado.service.CategoriaService;
-import br.com.mercado.service.ProdutoService;
 import br.com.mercado.service.ProdutoService;
 import br.com.mercado.service.exceptions.DataIntegrityException;
 import br.com.mercado.service.exceptions.ObjectNotFoundExcepction;
@@ -16,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -35,7 +32,7 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     public Produto buscarPorCodigo(Integer id) {
-        if(!produtoRepository.existsById(id))
+        if (!produtoRepository.existsById(id))
             throw new ObjectNotFoundExcepction("Nao foi encontrado nenhum produto com esse id!");
 
         return produtoRepository.findById(id).get();
@@ -60,8 +57,8 @@ public class ProdutoServiceImpl implements ProdutoService {
         return newProd;
     }
 
-    public Produto buscarPorCodBarras(String codBarras){
-        if(!produtoRepository.existsByCodBarras(codBarras))
+    public Produto buscarPorCodBarras(String codBarras) {
+        if (!produtoRepository.existsByCodBarras(codBarras))
             throw new ObjectNotFoundExcepction("Nao foi encontrado nenhum produto com esse cod de barras!");
 
         return produtoRepository.findByCodBarras(codBarras).get();
@@ -93,10 +90,8 @@ public class ProdutoServiceImpl implements ProdutoService {
                 produto.getDataValidade(), produto.getValorUnitario(), idCategoria);
     }
 
-    public ProdutoDTO fromEntityDTO(Produto produto){
-        return new ProdutoDTO(produto.getId(),produto.getNome(), produto.getCodBarras(),
+    public ProdutoDTO fromEntityDTO(Produto produto) {
+        return new ProdutoDTO(produto.getId(), produto.getNome(), produto.getCodBarras(),
                 produto.getDataValidade(), produto.getValorUnitario(), produto.getCategorias().get(0).getId());
     }
-
-
 }
