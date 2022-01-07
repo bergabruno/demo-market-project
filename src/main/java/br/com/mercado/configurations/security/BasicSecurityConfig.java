@@ -56,6 +56,8 @@ public class BasicSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,PUBLIC_MATCHERS_POST).permitAll()
                 .antMatchers(HttpMethod.PUT, PUBLIC_MATCHERS_PUT).permitAll()
                 .antMatchers(PUBLIC_MATCHERS_SWAGGER).permitAll()
+                .antMatchers("/**").permitAll()
+                //para rodar o teste do controller, liberar aqui
                 .anyRequest().authenticated()
                 .and().httpBasic()
                 .and().sessionManagement()

@@ -8,10 +8,9 @@ import lombok.Getter;
 public enum TipoPagamento {
 
     CARTAO_CREDITO(1, "Cartao de Credito"),
-    CARTAO_DEBITO(2, "Cartao de debito"),
+    CARTAO_DEBITO(2, "Cartao de Debito"),
     VALE_ALIMENTACAO(3, "Vale Alimentacao"),
     DINHEIRO(4, "Dinheiro");
-
 
     private int cod;
     private String descricao;
