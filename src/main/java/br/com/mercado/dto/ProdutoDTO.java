@@ -14,14 +14,20 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class ProdutoDTO {
 
+    private Integer id;
+
     @NotBlank
     private String nome;
 
     @NotBlank
     private String codBarras;
 
+    @NotBlank
     private String dataValidade;
 
     @NotNull
     private Double valorUnitario;
+
+    private Integer idCategoria;
+
 }

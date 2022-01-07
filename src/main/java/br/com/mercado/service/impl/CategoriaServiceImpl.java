@@ -31,10 +31,13 @@ public class CategoriaServiceImpl implements CategoriaService {
         return categoria;
     }
 
-    public Categoria buscarPorCodigo(Integer id){
+    public Categoria buscarPorCodigo(Integer id) {
+        if(!categoriaRepository.existsById(id))
+            throw new ObjectNotFoundExcepction("Erro ao encontrar categoria por este codigo!");
         Optional<Categoria> categoria = categoriaRepository.findById(id);
-        return categoria.orElseThrow(() -> new ObjectNotFoundExcepction("Erro ao encontrar categoria por este codigo!"));
+        return categoria.get();
     }
+
 
     public List<Categoria> obterTodos(){
         List<Categoria> categorias =  categoriaRepository.findAll();
