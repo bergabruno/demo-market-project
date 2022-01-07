@@ -12,6 +12,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -46,6 +47,10 @@ public class CategoriaControllerTest {
 
     private CategoriaDTO criarCategoriaDTO() {
         return new CategoriaDTO(null, "Almoxarifado");
+    }
+
+    private Categoria criarCategoria(){
+        return new Categoria(null, "Almoxarifado");
     }
 
     @Test
@@ -146,7 +151,7 @@ public class CategoriaControllerTest {
 
     @Test
     @DisplayName("Deve deletar uma categoria")
-    public void deveDeletarUmLivroTest() throws Exception{
+    public void deveDeletarUmaCategoriaTest() throws Exception{
 
         Categoria categoria = new Categoria(1, "Limpeza");
 
@@ -159,5 +164,99 @@ public class CategoriaControllerTest {
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
+
+    @Test
+    @DisplayName("Deve retornar Object Not Found ao deletar livro")
+    public void deveDeletarUmaCategoriaNotFoundTest() throws Exception{
+
+        Categoria categoria = new Categoria(1, "Limpeza");
+
+        Mockito.when(categoriaRepository.existsById(Mockito.anyInt())).thenReturn(false);
+        BDDMockito.given(categoriaRepository.findById(Mockito.anyInt())).willReturn(Optional.empty());
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .delete(categoria_API.concat("/" + 1));
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Deve atualizar uma categoria")
+    public void atualizarCategoriaTest() throws Exception{
+        Integer id = 12;
+
+        Categoria categoria = criarCategoria();
+        categoria.setId(12);
+
+        String json = new ObjectMapper().writeValueAsString(categoria);
+
+        Mockito.when(categoriaRepository.existsById(Mockito.anyInt())).thenReturn(true);
+        BDDMockito.given(categoriaRepository.findById(id)).willReturn(Optional.of(categoria));
+
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .put(categoria_API.concat("/" + id))
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("id").value(id))
+                .andExpect(MockMvcResultMatchers.jsonPath("nome").value("Almoxarifado"));
+    }
+
+    @Test
+    @DisplayName("Deve retornar Object Not Found ao atualizar categoria")
+    public void atualizarCategoriaNotFoundTest() throws Exception{
+
+            Integer id = 12;
+
+            Categoria categoria = criarCategoria();
+            categoria.setId(12);
+
+            String json = new ObjectMapper().writeValueAsString(categoria);
+
+            Mockito.when(categoriaRepository.existsById(Mockito.anyInt())).thenReturn(false);
+            BDDMockito.given(categoriaRepository.findById(id)).willReturn(Optional.empty());
+
+            MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                    .put(categoria_API.concat("/" + id))
+                    .content(json)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .contentType(MediaType.APPLICATION_JSON);
+
+            mvc.perform(request)
+                    .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Deve retornar um erro de nome obrigario")
+    public void alterarCategoriaSemNome() throws Exception{
+
+        Integer id = 12;
+
+        Categoria categoria = criarCategoria();
+        categoria.setId(12);
+        categoria.setNome(null);
+
+        String json = new ObjectMapper().writeValueAsString(categoria);
+
+        Mockito.when(categoriaRepository.existsById(Mockito.anyInt())).thenReturn(true);
+        BDDMockito.given(categoriaRepository.findById(id)).willReturn(Optional.of(categoria));
+
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .put(categoria_API.concat("/" + id))
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isBadRequest())
+                .andExpect(MockMvcResultMatchers.jsonPath("errors", Matchers.hasSize(1)));
+    }
+
 }
 

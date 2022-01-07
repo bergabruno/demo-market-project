@@ -29,15 +29,16 @@ public class ProdutoController {
 
     @PostMapping
     @ApiOperation(value = "insere um produto no banco")
-    public ResponseEntity<Produto> inserir(@Valid @RequestBody ProdutoNewDTO produtoNewDTO){
+    public ResponseEntity<ProdutoDTO> inserir(@Valid @RequestBody ProdutoNewDTO produtoNewDTO){
         log.info("Iniciando a insercao do produto");
 
         Produto produto = produtoService.fromDTO(produtoNewDTO);
 
         produtoService.inserir(produto);
 
+        ProdutoDTO produtoDTO = produtoService.fromEntityDTO(produto);
         log.info("insercao feita com sucesso do produto!");
-        return new ResponseEntity<Produto>(produto, HttpStatus.CREATED);
+        return new ResponseEntity<ProdutoDTO>(produtoDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

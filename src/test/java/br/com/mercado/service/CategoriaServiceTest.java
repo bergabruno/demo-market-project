@@ -30,7 +30,7 @@ public class CategoriaServiceTest {
     CategoriaRepository categoriaRepository;
 
     private Categoria gerarCat(){
-        return new Categoria(1 , "Almoxarifado");
+        return new Categoria(null , "Almoxarifado");
     }
 
     @Test
@@ -69,14 +69,18 @@ public class CategoriaServiceTest {
     @DisplayName("Deve obter uma categoria pelo id")
     public void deveObterCategoriaPeloId(){
 
+        Integer id = 1;
         Categoria categoria = gerarCat();
+        categoria.setId(1);
 
         Mockito.when(categoriaRepository.existsById(Mockito.anyInt())).thenReturn(true);
         Mockito.when(categoriaRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(categoria));
-//        Mockito.when(categoriaService.buscarPorCodigo(Mockito.anyInt())).thenReturn(new Categoria(1, "Almoxarifado"));
 
-        Assertions.assertThat(categoria.getId()).isEqualTo(1);
-        Assertions.assertThat(categoria.getNome()).isEqualTo("Almoxarifado");
+        Categoria categoriaEncontrada = categoriaService.buscarPorCodigo(id);
+
+        Assertions.assertThat(categoriaEncontrada).isNotNull();
+        Assertions.assertThat(categoria.getId()).isEqualTo(categoriaEncontrada.getId());
+        Assertions.assertThat(categoria.getNome()).isEqualTo(categoriaEncontrada.getNome());
     }
 
     @Test
