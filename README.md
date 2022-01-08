@@ -25,3 +25,13 @@ Documentacao da API: <a href="https://demo-market-project.herokuapp.com/swagger-
 -------
 
 <h1>Requisitos</h1>
+<p>O projeto foi realizado e manejado por meio de Sprints e a cada semana, uma Sprint nova (nos issues está todas as Sprint desde a Sprint 1)</p>
+
+
+
+
+
+
+-------
+<h1>Modelagem de classe:</h1>
+![image](https://user-images.githubusercontent.com/75227855/148631571-3d1e4c26-fc46-4e01-bec0-7051bed9d53c.png)
