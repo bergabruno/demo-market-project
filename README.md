@@ -3,6 +3,9 @@ API REST para Mercado
 
 Documentacao da API: <a href="https://demo-market-project.herokuapp.com/swagger-ui/index.html" target="_blank">Swagger UI</a> 
 
+
+Postman: <a href="https://documenter.getpostman.com/view/17639626/UVXgLHQS" target="_blank">Swagger UI</a> 
+
 -------
 
 <h1>Tecnologias</h1>
