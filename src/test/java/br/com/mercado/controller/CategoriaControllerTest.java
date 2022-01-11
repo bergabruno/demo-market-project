@@ -19,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -33,6 +34,7 @@ import java.util.Optional;
 @ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc
 @EnableWebMvc
+@ActiveProfiles("test")
 //@WebMvcTest ??
 public class CategoriaControllerTest {
 
@@ -186,14 +188,11 @@ public class CategoriaControllerTest {
     public void atualizarCategoriaTest() throws Exception{
         Integer id = 12;
 
-        Categoria categoria = criarCategoria();
-        categoria.setId(12);
+        Categoria categoria = new Categoria(12, "teste");
 
         String json = new ObjectMapper().writeValueAsString(categoria);
 
-        Mockito.when(categoriaRepository.existsById(Mockito.anyInt())).thenReturn(true);
         BDDMockito.given(categoriaRepository.findById(id)).willReturn(Optional.of(categoria));
-
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .put(categoria_API.concat("/" + id))
@@ -233,7 +232,7 @@ public class CategoriaControllerTest {
 
     @Test
     @DisplayName("Deve retornar um erro de nome obrigario")
-    public void alterarCategoriaSemNome() throws Exception{
+    public void atualizarCategoriaSemNome() throws Exception{
 
         Integer id = 12;
 
@@ -245,7 +244,6 @@ public class CategoriaControllerTest {
 
         Mockito.when(categoriaRepository.existsById(Mockito.anyInt())).thenReturn(true);
         BDDMockito.given(categoriaRepository.findById(id)).willReturn(Optional.of(categoria));
-
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .put(categoria_API.concat("/" + id))

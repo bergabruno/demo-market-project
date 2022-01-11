@@ -32,10 +32,8 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     public Produto buscarPorCodigo(Integer id) {
-        if (!produtoRepository.existsById(id))
-            throw new ObjectNotFoundExcepction("Nao foi encontrado nenhum produto com esse id!");
 
-        return produtoRepository.findById(id).get();
+        return produtoRepository.findById(id).orElseThrow( () -> new ObjectNotFoundExcepction("Nao foi encontrado nenhum produto com esse id!"));
     }
 
     public List<Produto> listarTodos() {

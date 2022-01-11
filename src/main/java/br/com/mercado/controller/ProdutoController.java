@@ -38,21 +38,19 @@ public class ProdutoController {
 
         ProdutoDTO produtoDTO = produtoService.fromEntityDTO(produto);
         log.info("insercao feita com sucesso do produto!");
-        return new ResponseEntity<ProdutoDTO>(produtoDTO, HttpStatus.CREATED);
+        return new ResponseEntity<ProdutoDTO>(produtoDTO    , HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     @ApiOperation(value = "busca um produto por codigo")
-    public ResponseEntity<ProdutoDTO> buscarPorCodigo(@PathVariable Integer id){
+    public ResponseEntity<Produto> buscarPorCodigo(@PathVariable Integer id){
         log.info("Iniciando a busca por codigo");
 
         Produto produto = produtoService.buscarPorCodigo(id);
 
         log.info("busca feita com sucesso");
 
-        ProdutoDTO produtoDTO = produtoService.fromEntityDTO(produto);
-
-        return ResponseEntity.ok().body(produtoDTO);
+        return ResponseEntity.ok().body(produto);
     }
 
     @GetMapping("/codigoBarras/{codBarras}")

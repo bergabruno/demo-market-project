@@ -22,4 +22,7 @@ public interface CategoriaService {
     public Page<Categoria> obterPagina(Integer page, Integer linhasPorPage, String ordenarPor, String direcao);
 
     public Categoria fromDTO(CategoriaDTO categoriaDTO);
+
+    public CategoriaDTO fromEntity(Categoria categoria);
+
 }

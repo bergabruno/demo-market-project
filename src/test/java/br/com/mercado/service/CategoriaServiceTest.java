@@ -1,6 +1,7 @@
 package br.com.mercado.service;
 
 import br.com.mercado.model.entity.Categoria;
+import br.com.mercado.model.entity.Produto;
 import br.com.mercado.repository.CategoriaRepository;
 import br.com.mercado.service.exceptions.DataIntegrityException;
 import br.com.mercado.service.exceptions.ObjectNotFoundExcepction;
@@ -8,10 +9,12 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
@@ -20,6 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
+@ActiveProfiles("test")
 public class CategoriaServiceTest {
 
     @Autowired
@@ -30,7 +34,7 @@ public class CategoriaServiceTest {
     CategoriaRepository categoriaRepository;
 
     private Categoria gerarCat(){
-        return new Categoria(null , "Almoxarifado");
+        return new Categoria(1 , "Almoxarifado");
     }
 
     @Test
@@ -84,7 +88,7 @@ public class CategoriaServiceTest {
     }
 
     @Test
-    @DisplayName("Deve retornar um Object not found")
+    @DisplayName("Deve retornar um Object not found quando procurar pelo id da categoria invalido")
     public void deveObterCategoriaPeloIdFalha() {
         Mockito.when(categoriaRepository.existsById(Mockito.anyInt())).thenReturn(false);
 
@@ -92,6 +96,67 @@ public class CategoriaServiceTest {
 
         Assertions.assertThat(exception)
                 .isInstanceOf(ObjectNotFoundExcepction.class)
-                .hasMessage("Erro ao encontrar categoria por este codigo!");
+                .hasMessage("Erro ao buscar categoria");
+    }
+
+    @Test
+    @DisplayName("Deve apagar uma categoria por ID")
+    public void deveApagarUmaCategoriaPorId(){
+
+        Categoria categoria = gerarCat();
+
+//        categoria.getProdutos().add(new Produto(1, "Farinha de trigo 1kg", "1046696",
+//                "20/02/2022", 4.50));
+
+        Mockito.when(categoriaRepository.existsById(categoria.getId())).thenReturn(true);
+        categoriaService.deletar(categoria.getId());
+
+        Mockito.verify(categoriaService, Mockito.times(1)).deletar(categoria.getId());
+    }
+
+    @Test
+    @DisplayName("Nao deve apagar uma categoria por id")
+    public void naoDeveApagarUmaCategoriaPorId(){
+        Mockito.when(categoriaRepository.existsById(Mockito.anyInt())).thenReturn(false);
+
+        Throwable exception = Assertions.catchThrowable(() -> categoriaService.deletar(Mockito.anyInt()));
+
+        Assertions.assertThat(exception)
+                .isInstanceOf(ObjectNotFoundExcepction.class)
+                .hasMessage("Nao existe nenhuma categoria com este ID!");
+    }
+
+    @Test
+    @DisplayName("Deve atualizar uma categoria")
+    public void deveAlterarUmaCategoria() {
+
+        int id = 1;
+
+        Categoria categoria = gerarCat();
+
+        Categoria novaCategoria = new Categoria(2, "Mercearia");
+        novaCategoria.setId(1);
+
+        Mockito.when(categoriaRepository.existsById(Mockito.anyInt())).thenReturn(true);
+        Mockito.when(categoriaRepository.save(categoria)).thenReturn(novaCategoria);
+
+        Categoria cat = categoriaService.alterar(categoria);
+
+        assertThat(cat.getId()).isEqualTo(novaCategoria);
+        assertThat(cat.getNome()).isEqualTo(novaCategoria);
+    }
+
+
+    @Test
+    @DisplayName("Nao deve alterar uma categoria por id")
+    public void naoDeveAlterarUmaCategoriaPorId(){
+        Categoria categoria = gerarCat();
+        Mockito.when(categoriaRepository.existsById(Mockito.anyInt())).thenReturn(false);
+
+        Throwable exception = Assertions.catchThrowable(() -> categoriaService.alterar(categoria));
+
+        Assertions.assertThat(exception)
+                .isInstanceOf(ObjectNotFoundExcepction.class)
+                .hasMessage("Nao existe nenhuma categoria com este ID!");
     }
 }

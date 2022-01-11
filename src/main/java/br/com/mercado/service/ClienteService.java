@@ -23,4 +23,6 @@ public interface ClienteService {
     public Cliente fromDTO(ClienteDTO clienteDTO);
 
     public Cliente fromDTO(ClienteNewDTO clienteNewDTO);
+
+    public ClienteNewDTO fromEntity(Cliente cliente);
 }

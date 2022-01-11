@@ -21,5 +21,7 @@ public interface PedidoService {
 
     public Pedido fromDTO(PedidoDTO pedidoDTO);
 
+    public PedidoDTO fromEntity(Pedido pedido);
+
     public Pedido tipoPagamento(Integer idPedido ,Integer tipo);
 }

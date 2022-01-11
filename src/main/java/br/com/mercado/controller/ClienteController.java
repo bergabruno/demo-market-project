@@ -28,12 +28,15 @@ public class ClienteController {
 
     @PostMapping
     @ApiOperation(value = "inserir um cliente")
-    public ResponseEntity<Cliente> inserir(@Valid @RequestBody ClienteNewDTO clienteDTO){
+    public ResponseEntity<ClienteNewDTO> inserir(@Valid @RequestBody ClienteNewDTO clienteDTO){
         log.info("Iniciando insercao de cliente");
+
         Cliente cliente = clienteService.fromDTO(clienteDTO);
         clienteService.inserir(cliente);
+        clienteDTO = clienteService.fromEntity(cliente);
+
         log.info("Insercao feita com sucesso do Cliente!");
-        return new ResponseEntity<Cliente>(cliente, HttpStatus.CREATED);
+        return new ResponseEntity<ClienteNewDTO>(clienteDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

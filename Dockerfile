@@ -4,7 +4,7 @@ FROM openjdk:11
 RUN mkdir -p /app/demo-market
 
 COPY target/demo-market-project-0.0.1-*.jar /app/demo-market-project.jar
-#copia o .jar da nossa aplicacao para a pasta /app
+#copia o .jar da aplicacao para a pasta /app do docker
 #Error: Unable to access jarfile demo-market-project.jar
 
 EXPOSE 8080

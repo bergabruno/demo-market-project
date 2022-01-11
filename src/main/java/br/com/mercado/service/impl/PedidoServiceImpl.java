@@ -53,12 +53,8 @@ public class PedidoServiceImpl implements PedidoService {
     }
 
     public Pedido buscarPorCodigo(Integer id) {
-        if (!pedidoRepository.existsById(id))
-            throw new ObjectNotFoundExcepction("Nao existe nenhum pedido com este ID!");
-
         Optional<Pedido> pedido = pedidoRepository.findById(id);
-        pedido.get().setCliente(pedido.get().getCliente());
-        return pedido.orElseThrow(() -> new RuntimeException("Erro ao encontrar produto com este ID!"));
+        return pedido.orElseThrow(() -> new ObjectNotFoundExcepction("Erro ao encontrar pedido com este ID!"));
     }
 
     //tirar o iddopedido e colocar um current
@@ -131,6 +127,11 @@ public class PedidoServiceImpl implements PedidoService {
 
     public Pedido fromDTO(PedidoDTO pedidoDTO) {
         return new Pedido(pedidoDTO.getId(), pedidoDTO.getCliente(), StatusPedido.EM_ANDAMENTO, LocalDate.now());
+    }
+
+    @Override
+    public PedidoDTO fromEntity(Pedido pedido) {
+        return new PedidoDTO(pedido.getId(), pedido.getCliente(), pedido.getStatusPedido().getCod(), pedido.getDataPedido());
     }
 
     @Override

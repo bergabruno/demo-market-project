@@ -26,14 +26,16 @@ public class PedidoController {
 
     @PostMapping
     @ApiOperation(value = "criar um pedido")
-    public ResponseEntity<Pedido> criarPedido(@Valid @RequestBody PedidoDTO pedidoDTO) {
+    public ResponseEntity<PedidoDTO> criarPedido(@Valid @RequestBody PedidoDTO pedidoDTO) {
         log.info("Iniciando a insercao do pedido");
 
         Pedido pedido = pedidoService.fromDTO(pedidoDTO);
-        pedidoService.criarPedido(pedido);
+        pedido = pedidoService.criarPedido(pedido);
+
+        pedidoDTO = pedidoService.fromEntity(pedido);
 
         log.info("Retornando o pedido junto com HttpStatus CREATED");
-        return new ResponseEntity<Pedido>(pedido, HttpStatus.CREATED);
+        return new ResponseEntity<PedidoDTO>(pedidoDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")

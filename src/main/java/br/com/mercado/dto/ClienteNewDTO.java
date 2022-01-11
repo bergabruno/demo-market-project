@@ -16,6 +16,8 @@ import javax.validation.constraints.NotEmpty;
 @Setter
 public class ClienteNewDTO {
 
+    private Integer id;
+
     @NotBlank
     private String nome;
 

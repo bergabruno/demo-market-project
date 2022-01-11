@@ -32,10 +32,8 @@ public class CategoriaServiceImpl implements CategoriaService {
     }
 
     public Categoria buscarPorCodigo(Integer id) {
-        if(!categoriaRepository.existsById(id))
-            throw new ObjectNotFoundExcepction("Erro ao encontrar categoria por este codigo!");
         Optional<Categoria> categoria = categoriaRepository.findById(id);
-        return categoria.get();
+        return categoria.orElseThrow(() ->  new ObjectNotFoundExcepction("Erro ao buscar categoria"));
     }
 
 
@@ -60,7 +58,9 @@ public class CategoriaServiceImpl implements CategoriaService {
             throw new ObjectNotFoundExcepction("Nao existe nenhuma categoria com este ID!");
         }
         Categoria newCat = buscarPorCodigo(categoria.getId());
+        //pegando a categoria pelo banco - ainda nao foi atualizada
         updateData(newCat, categoria);
+        //categoria com os dados atualizados (nome)
         return categoriaRepository.save(newCat);
     }
 
@@ -80,6 +80,10 @@ public class CategoriaServiceImpl implements CategoriaService {
 
     private void updateData(Categoria newCat, Categoria categoria){
         newCat.setNome(categoria.getNome());
+    }
+
+    public CategoriaDTO fromEntity(Categoria categoria){
+        return new CategoriaDTO(categoria.getId(), categoria.getNome());
     }
 
 }

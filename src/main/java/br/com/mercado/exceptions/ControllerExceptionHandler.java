@@ -10,6 +10,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.NoSuchElementException;
@@ -67,5 +68,10 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).body(err);
     }
 
+//    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+//    public ResponseEntity<StandardError> letraEmNumero(HttpRequestMethodNotSupportedException e, HttpServletRequest request){
+//        StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Ops, voce colocou uma letra onde so entram numeros!", request.getRequestURI());
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
+//    }
 
 }
