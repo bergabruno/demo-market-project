@@ -101,6 +101,4 @@ public class CategoriaRepositoryTest {
         Assertions.assertThat(categoriaNula).isNull();
     }
 
-
-
 }

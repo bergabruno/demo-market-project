@@ -3,7 +3,7 @@ FROM openjdk:11
 
 RUN mkdir -p /app/demo-market
 
-COPY target/demo-market-project-0.0.1-*.jar /app/demo-market-project.jar
+COPY target/demo-market-project-0.0.1-SNAPSHOT.jar /app/demo-market-project/
 #copia o .jar da aplicacao para a pasta /app do docker
 #Error: Unable to access jarfile demo-market-project.jar
 

@@ -2,6 +2,7 @@ package br.com.mercado.repository;
 
 import br.com.mercado.model.entity.Categoria;
 import br.com.mercado.model.entity.Cliente;
+import br.com.mercado.model.entity.Produto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -63,6 +64,15 @@ public class ClienteRepositoryTest {
     }
 
     @Test
+    @DisplayName("Deve retornar falso quando nao existir um cliente com o email")
+    public void deveRetornarFalseQuandoNaoExistirPeloEmailTest() {
+
+        boolean exists = clienteRepository.existsByCpf(Mockito.anyString());
+
+        Assertions.assertThat(exists).isFalse();
+    }
+
+    @Test
     @DisplayName("Deve obter um cliente pelo ID")
     public void deveObterUmClientePeloIdTest(){
         Integer id = 1;
@@ -93,14 +103,41 @@ public class ClienteRepositoryTest {
     @DisplayName("Deve salvar um cliente")
     public void deveSalvarUmCliente(){
 
-        Cliente cliente = new Cliente();
+        Cliente cliente = gerarCliente();
 
         Cliente clienteSalvo = clienteRepository.save(cliente);
 
         Assertions.assertThat(clienteSalvo).isNotNull();
-
     }
 
+    @Test
+    @DisplayName("Deve deletar um cliente")
+    public void deveDeletarUmCliente(){
 
+        Cliente cliente = gerarCliente();
+        entityManager.persist(cliente);
+        Cliente clienteSalvo = entityManager.find(Cliente.class, cliente.getId());
+
+        clienteRepository.deleteById(clienteSalvo.getId());
+        Cliente clienteNull = entityManager.find(Cliente.class, cliente.getId());
+
+        Assertions.assertThat(clienteNull).isNull();
+    }
+
+    @Test
+    @DisplayName("deve atualizar um cliente")
+    public void deveAtualizarCliente(){
+        Cliente cliente = gerarCliente();
+        cliente.setId(null);
+
+        Cliente clienteAlterado = entityManager.persist(cliente);
+       clienteAlterado.setNome("Julia");
+
+        Cliente clienteSalvo = clienteRepository.save(clienteAlterado);
+
+        Assertions.assertThat(clienteSalvo).isNotNull();
+        Assertions.assertThat(clienteSalvo.getId()).isEqualTo(clienteAlterado.getId());
+        Assertions.assertThat(clienteSalvo.getNome()).isEqualTo(clienteAlterado.getNome());
+    }
 
 }

@@ -104,14 +104,14 @@ public class CategoriaServiceTest {
     public void deveApagarUmaCategoriaPorId(){
 
         Categoria categoria = gerarCat();
+        categoria.setId(1);
 
-//        categoria.getProdutos().add(new Produto(1, "Farinha de trigo 1kg", "1046696",
-//                "20/02/2022", 4.50));
 
+        Mockito.when(categoriaRepository.findById(categoria.getId())).thenReturn(Optional.of(categoria));
         Mockito.when(categoriaRepository.existsById(categoria.getId())).thenReturn(true);
         categoriaService.deletar(categoria.getId());
 
-        Mockito.verify(categoriaService, Mockito.times(1)).deletar(categoria.getId());
+        Mockito.verify(categoriaRepository, Mockito.times(1)).deleteById(categoria.getId());
     }
 
     @Test
@@ -133,17 +133,20 @@ public class CategoriaServiceTest {
         int id = 1;
 
         Categoria categoria = gerarCat();
+        categoria.setId(1);
 
-        Categoria novaCategoria = new Categoria(2, "Mercearia");
+        //quero que ele retorne essa categoria atualizada
+        Categoria novaCategoria = new Categoria(1, "Mercearia");
         novaCategoria.setId(1);
 
+        Mockito.when(categoriaRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(categoria));
         Mockito.when(categoriaRepository.existsById(Mockito.anyInt())).thenReturn(true);
         Mockito.when(categoriaRepository.save(categoria)).thenReturn(novaCategoria);
 
         Categoria cat = categoriaService.alterar(categoria);
 
-        assertThat(cat.getId()).isEqualTo(novaCategoria);
-        assertThat(cat.getNome()).isEqualTo(novaCategoria);
+        assertThat(cat.getId()).isEqualTo(novaCategoria.getId());
+        assertThat(cat.getNome()).isEqualTo("Mercearia");
     }
 
 

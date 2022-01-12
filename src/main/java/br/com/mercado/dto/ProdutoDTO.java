@@ -1,5 +1,6 @@
 package br.com.mercado.dto;
 
+import br.com.mercado.model.entity.Produto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,5 +30,14 @@ public class ProdutoDTO {
     private Double valorUnitario;
 
     private Integer idCategoria;
+
+    public ProdutoDTO(Produto produto){
+        this.id = produto.getId();
+        this.nome = produto.getNome();
+        this.codBarras = produto.getCodBarras();
+        this.dataValidade = produto.getDataValidade();
+        this.valorUnitario = produto.getValorUnitario();
+        this.idCategoria = produto.getCategorias().get(0).getId();
+    }
 
 }

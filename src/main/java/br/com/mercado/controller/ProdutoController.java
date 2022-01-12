@@ -1,5 +1,6 @@
 package br.com.mercado.controller;
 
+import br.com.mercado.dto.ClienteDTO;
 import br.com.mercado.dto.ProdutoDTO;
 import br.com.mercado.dto.ProdutoNewDTO;
 import br.com.mercado.model.entity.Produto;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController
@@ -38,19 +40,21 @@ public class ProdutoController {
 
         ProdutoDTO produtoDTO = produtoService.fromEntityDTO(produto);
         log.info("insercao feita com sucesso do produto!");
-        return new ResponseEntity<ProdutoDTO>(produtoDTO    , HttpStatus.CREATED);
+        return new ResponseEntity<ProdutoDTO>(produtoDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
     @ApiOperation(value = "busca um produto por codigo")
-    public ResponseEntity<Produto> buscarPorCodigo(@PathVariable Integer id){
+    public ResponseEntity<ProdutoDTO> buscarPorCodigo(@PathVariable Integer id){
         log.info("Iniciando a busca por codigo");
 
         Produto produto = produtoService.buscarPorCodigo(id);
 
         log.info("busca feita com sucesso");
 
-        return ResponseEntity.ok().body(produto);
+        ProdutoDTO produtoDTO = produtoService.fromEntityDTO(produto);
+
+        return ResponseEntity.ok().body(produtoDTO);
     }
 
     @GetMapping("/codigoBarras/{codBarras}")
@@ -68,12 +72,15 @@ public class ProdutoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Produto>> listarTodos(){
+    public ResponseEntity<List<ProdutoDTO>> listarTodos(){
         log.info("iniciando a listagem de todos os produtos");
 
         List<Produto> produtos = produtoService.listarTodos();
 
-        return new ResponseEntity<List<Produto>>(produtos, HttpStatus.OK);
+        List<ProdutoDTO> produtosDTO = produtos.stream().map(obj -> new ProdutoDTO(obj)).collect(Collectors.toList());
+
+
+        return new ResponseEntity<List<ProdutoDTO>>(produtosDTO, HttpStatus.OK);
     }
 
     @PutMapping("/{id}")

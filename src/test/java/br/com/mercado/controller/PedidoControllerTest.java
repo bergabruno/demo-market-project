@@ -1,6 +1,7 @@
 package br.com.mercado.controller;
 
 import br.com.mercado.dto.CategoriaDTO;
+import br.com.mercado.dto.PedidoDTO;
 import br.com.mercado.model.entity.Categoria;
 import br.com.mercado.model.entity.Pedido;
 import br.com.mercado.model.entity.enums.StatusPedido;
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -45,11 +47,11 @@ public class PedidoControllerTest {
     private PedidoRepository pedidoRepository;
     //tentar futuramente alterar para service
 
-    static String categoria_API = "/api/v1/pedidos";
+    static String pedido_API = "/api/v1/pedidos";
 
     @Test
-    @DisplayName("Deve retornar uma categoria pelo id")
-    public void obterCategoriaTest() throws Exception {
+    @DisplayName("Deve retornar um pedido pelo id")
+    public void obterPedidoTest() throws Exception {
 
         Integer id = 1;
 
@@ -59,12 +61,56 @@ public class PedidoControllerTest {
         BDDMockito.given(pedidoRepository.findById(id)).willReturn(Optional.of(pedido));
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .get(categoria_API.concat("/" + id))
+                .get(pedido_API.concat("/" + id))
                 .accept(MediaType.APPLICATION_JSON);
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+
+
+    @Test
+    @DisplayName("Deve retornar um Object Not Found")
+    public void obterPedidoFalhaTest() throws Exception {
+
+        Integer id = 1;
+
+        Mockito.when(pedidoRepository.existsById(Mockito.anyInt())).thenReturn(false);
+        BDDMockito.given(pedidoRepository.findById(id)).willReturn(Optional.empty());
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(pedido_API.concat("/" + id))
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andExpect(MockMvcResultMatchers.jsonPath("message").value("Erro ao encontrar pedido com este ID!"));
+    }
+
+    @Test
+    @DisplayName("Deve criar um Pedido")
+    public void deveCriarPedido() throws Exception{
+
+        PedidoDTO pedidoDTO = new PedidoDTO();
+
+        Pedido pedido = new Pedido();
+        pedido.setStatusPedido(StatusPedido.EM_ANDAMENTO);
+
+        BDDMockito.given(pedidoRepository.save(Mockito.any(Pedido.class))).willReturn(pedido);
+
+        String json = new ObjectMapper().writeValueAsString(pedidoDTO);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post(pedido_API)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isCreated());
+
+    }
+
 
 
 

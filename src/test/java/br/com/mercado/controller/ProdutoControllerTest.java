@@ -1,13 +1,17 @@
 package br.com.mercado.controller;
 
 
+import br.com.mercado.dto.CategoriaDTO;
+import br.com.mercado.dto.ProdutoDTO;
 import br.com.mercado.model.entity.Categoria;
 import br.com.mercado.model.entity.Produto;
 import br.com.mercado.repository.ProdutoRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -41,9 +45,40 @@ public class ProdutoControllerTest {
 
     static String produto_API = "/api/v1/produtos";
 
+    private Produto gerarProduto(){
+        return new Produto(5, "Arroz 5kg", "8246718",
+                "20/02/2022", 23.59);
+    }
+
+    @Test
+    @DisplayName("Deve criar um produto com sucesso")
+    public void deveCriarProdutoTest() throws Exception {
+
+        Produto produtoSalvo = gerarProduto();
+        produtoSalvo.getCategorias().add(new Categoria());
+
+        ProdutoDTO produtoDTO = new ProdutoDTO(produtoSalvo);
+        produtoDTO.setIdCategoria(1);
+
+        String json = new ObjectMapper().writeValueAsString(produtoDTO);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post(produto_API)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("nome").value(produtoSalvo.getNome()))
+                .andExpect(MockMvcResultMatchers.jsonPath("dataValidade").value(produtoSalvo.getDataValidade()))
+                .andExpect(MockMvcResultMatchers.jsonPath("valorUnitario").value(produtoSalvo.getValorUnitario()))
+                .andExpect(MockMvcResultMatchers.jsonPath("codBarras").value(produtoDTO.getCodBarras()));
+    }
+
     @Test
     @DisplayName("Deve retornar um produto pelo id")
-    public void obterCategoriaTest() throws Exception {
+    public void obterProdutoTest() throws Exception {
 
         Integer id = 1;
 
@@ -60,9 +95,24 @@ public class ProdutoControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
+
+    @Test
+    @DisplayName("Deve retornar um Object not found ao buscar produto pelo id")
+    public void obterProdutoFalhaTest() throws Exception {
+
+        BDDMockito.given(produtoRepository.findById(Mockito.anyInt())).willReturn(Optional.empty());
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(produto_API.concat("/" + 1))
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
     @Test
     @DisplayName("Deve retornar um produto pelo codigo de barras")
-    public void obterCategoriaPorCodBarrasTest() throws Exception {
+    public void obterProdutoPorCodBarrasTest() throws Exception {
 
         String codigoBarras = "32047";
 
@@ -77,6 +127,20 @@ public class ProdutoControllerTest {
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    @DisplayName("Deve retornar um Object not found ao buscar produto pelo codigo de barras")
+    public void obterProdutoCodBarrasFalhaTest() throws Exception {
+
+        BDDMockito.given(produtoRepository.findByCodBarras(Mockito.anyString())).willReturn(Optional.empty());
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(produto_API.concat("/codigoBarras/" + "32132"))
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
 }

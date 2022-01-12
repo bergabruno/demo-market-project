@@ -168,7 +168,7 @@ public class CategoriaControllerTest {
     }
 
     @Test
-    @DisplayName("Deve retornar Object Not Found ao deletar livro")
+    @DisplayName("Deve retornar Object Not Found ao deletar categoria")
     public void deveDeletarUmaCategoriaNotFoundTest() throws Exception{
 
         Categoria categoria = new Categoria(1, "Limpeza");
@@ -192,6 +192,7 @@ public class CategoriaControllerTest {
 
         String json = new ObjectMapper().writeValueAsString(categoria);
 
+        Mockito.when(categoriaRepository.existsById(Mockito.anyInt())).thenReturn(true);
         BDDMockito.given(categoriaRepository.findById(id)).willReturn(Optional.of(categoria));
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
