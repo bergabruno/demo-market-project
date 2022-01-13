@@ -52,7 +52,7 @@ public class ClienteController {
     }
 
     @GetMapping
-    @Operation(summary = "Listar todos os clientes", security = @SecurityRequirement(name = "basicAuth"))
+    @Operation(summary = "Listar todos os clientes", security = @SecurityRequirement(name = "Bearer"))
     public ResponseEntity<List<ClienteDTO>> listarTodos(){
         log.info("Iniciando listagem de todos cliente");
         List<Cliente> lista = clienteService.obterTodos();
@@ -64,7 +64,7 @@ public class ClienteController {
         return ResponseEntity.ok().body(listDTO);
     }
 
-    
+
     @PutMapping("/{id}")
     @ApiOperation(value = "alterar um cliente pelo id")
     public ResponseEntity<Cliente> alterar(@Valid @RequestBody ClienteDTO clienteDTO,

@@ -12,5 +12,18 @@ import org.springframework.context.annotation.Profile;
 public class ProdConfig {
     //O spring entende que ele tem que rodar por conta que o profile test está ativo,
     //@Configuration - todos os @Bean da classe serao iniciados quando o profile teste estiver rodando.
+    @Autowired
+    BDService bdService;
 
+    @Value("${spring.jpa.hibernate.ddl-auto}")
+    private String ddl;
+
+    @Bean
+    public boolean instanciarBanco(){
+        if("create".equalsIgnoreCase(ddl)){
+            bdService.iniciarBanco();
+            return true;
+        }
+        return false;
+    }
 }
