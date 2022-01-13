@@ -6,7 +6,8 @@ import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter@Setter
+@Getter
+@Setter
 public class ValidationError extends StandardError{
 
     private List<FieldMessage> errors = new ArrayList<>();

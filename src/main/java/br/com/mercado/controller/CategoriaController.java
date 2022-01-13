@@ -102,7 +102,9 @@ public class CategoriaController {
     @ApiOperation(value = "deletar categoria")
     public ResponseEntity<Void> deletar(@PathVariable Integer id){
         log.info("Iniciando delecao de categoria");
+
         categoriaService.deletar(id);
+
         log.info("delecao feita com sucesso!");
         return ResponseEntity.noContent().build();
     }

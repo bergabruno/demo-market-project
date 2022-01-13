@@ -6,6 +6,8 @@ import br.com.mercado.model.entity.Cliente;
 import br.com.mercado.service.ClienteService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,7 +52,7 @@ public class ClienteController {
     }
 
     @GetMapping
-    @ApiOperation(value = "listar todos os clientes")
+    @Operation(summary = "Listar todos os clientes", security = @SecurityRequirement(name = "basicAuth"))
     public ResponseEntity<List<ClienteDTO>> listarTodos(){
         log.info("Iniciando listagem de todos cliente");
         List<Cliente> lista = clienteService.obterTodos();
@@ -62,6 +64,7 @@ public class ClienteController {
         return ResponseEntity.ok().body(listDTO);
     }
 
+    
     @PutMapping("/{id}")
     @ApiOperation(value = "alterar um cliente pelo id")
     public ResponseEntity<Cliente> alterar(@Valid @RequestBody ClienteDTO clienteDTO,

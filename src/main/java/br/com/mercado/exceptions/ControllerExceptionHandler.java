@@ -43,7 +43,6 @@ public class ControllerExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err);
     }
 
-    //quando
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<StandardError> elements(NoSuchElementException e, HttpServletRequest request){
         StandardError err = new StandardError(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), "Sem valor ou com alguma letra", request.getRequestURI());

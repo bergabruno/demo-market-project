@@ -2,6 +2,7 @@ package br.com.mercado.controller;
 
 import br.com.mercado.dto.CategoriaDTO;
 import br.com.mercado.model.entity.Categoria;
+import br.com.mercado.model.entity.Produto;
 import br.com.mercado.repository.CategoriaRepository;
 import br.com.mercado.service.CategoriaService;
 import br.com.mercado.service.exceptions.DataIntegrityException;
@@ -44,6 +45,9 @@ public class CategoriaControllerTest {
     @MockBean
     private CategoriaRepository categoriaRepository;
     //tentar futuramente alterar para service
+
+    @Autowired
+    CategoriaService categoriaService;
 
     static String categoria_API = "/api/v1/categorias";
 
@@ -188,12 +192,16 @@ public class CategoriaControllerTest {
     public void atualizarCategoriaTest() throws Exception{
         Integer id = 12;
 
-        Categoria categoria = new Categoria(12, "teste");
+        Categoria categoria = new Categoria(12, "Almoxarifado");
 
-        String json = new ObjectMapper().writeValueAsString(categoria);
+        CategoriaDTO categoriaDTO = new CategoriaDTO(categoria);
+        categoriaDTO.setNome("Limpeza");
+
+        String json = new ObjectMapper().writeValueAsString(categoriaDTO);
 
         Mockito.when(categoriaRepository.existsById(Mockito.anyInt())).thenReturn(true);
-        BDDMockito.given(categoriaRepository.findById(id)).willReturn(Optional.of(categoria));
+        BDDMockito.given(categoriaRepository.findById(Mockito.anyInt())).willReturn(Optional.of(categoria));
+        BDDMockito.given(categoriaRepository.save(Mockito.any(Categoria.class))).willReturn(categoria);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .put(categoria_API.concat("/" + id))
@@ -204,7 +212,7 @@ public class CategoriaControllerTest {
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("id").value(id))
-                .andExpect(MockMvcResultMatchers.jsonPath("nome").value("Almoxarifado"));
+                .andExpect(MockMvcResultMatchers.jsonPath("nome").value("Limpeza"));
     }
 
     @Test
