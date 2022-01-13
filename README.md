@@ -12,6 +12,7 @@ Postman: <a href="https://documenter.getpostman.com/view/17639626/UVXgLHQS" targ
 
 <ul>
 <li>Java</li>
+li>Spring Boot</li>
 <li>Spring Data</li>
 <li>Spring Security</li>
 <li>MySQL</li>
@@ -31,10 +32,5 @@ Postman: <a href="https://documenter.getpostman.com/view/17639626/UVXgLHQS" targ
 <p>O projeto foi realizado e manejado por meio de Sprints e a cada semana, uma Sprint nova (nos issues está todas as Sprint desde a Sprint 1)</p>
 
 
-
-
-
-
--------
 <h1>Modelagem de classe:</h1>
 ![image](https://user-images.githubusercontent.com/75227855/148631571-3d1e4c26-fc46-4e01-bec0-7051bed9d53c.png)
