@@ -22,21 +22,6 @@ import java.util.Arrays;
 @RestController
 public class MercadoApplication{
 
-	@Autowired
-	BDService bdService;
-
-	@Value("${spring.jpa.hibernate.ddl-auto}")
-	private String ddl;
-
-	@Bean
-	public boolean instanciarBanco(){
-		if("create".equalsIgnoreCase(ddl)){
-			bdService.iniciarBanco();
-			return true;
-		}
-		return false;
-	}
-
 	public static void main(String[] args) {
 		SpringApplication.run(MercadoApplication.class, args);
 	}
