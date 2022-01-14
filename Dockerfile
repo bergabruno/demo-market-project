@@ -6,8 +6,7 @@ COPY target/*.jar ./app.jar
 
 EXPOSE 8080
 
-#ENV PROFILES="prod"
+ENV PROFILES="docker"
 
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-jar", "app.jar", "--spring.profiles.active=${PROFILES}"]
 
-#"--spring.profiles.active=${PROFILES}"
