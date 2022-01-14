@@ -1,0 +1,22 @@
+version: '3'
+services:
+  db:
+    image: mariadb:10.6.5
+    restart: always
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345678
+
+  demo-market-project-java:
+    image:  demo-market-project
+    restart: always
+    ports:
+      - 8080:8080
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    volumes:
+      - ./src/main/resources/application.properties:/usr/app/application.properties

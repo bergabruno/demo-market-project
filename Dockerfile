@@ -1,18 +1,13 @@
 FROM openjdk:11
-#Escolher a imagem do JDK
 
-RUN mkdir -p /app/demo-market
+WORKDIR /usr/app
 
-COPY target/demo-market-project-0.0.1-*.jar /app/demo-market-project.jar
-#copia o .jar da nossa aplicacao para a pasta /app
-#Error: Unable to access jarfile demo-market-project.jar
+COPY target/*.jar ./app.jar
 
 EXPOSE 8080
 
-WORKDIR /app
-#diretorio principal - dps que finalizar o build, gera esse diretorio e trabalha dentro dele
+#ENV PROFILES="prod"
 
-ENTRYPOINT ["java", "-jar", "demo-market-project.jar"]
-#como se fosse um ls
+CMD ["java", "-jar", "app.jar"]
 
-# RUN chown -R /users/brunobergamasco/IdeaProject/
+#"--spring.profiles.active=${PROFILES}"

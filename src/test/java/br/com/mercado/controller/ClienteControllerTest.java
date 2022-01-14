@@ -1,0 +1,169 @@
+package br.com.mercado.controller;
+
+import br.com.mercado.dto.ClienteDTO;
+import br.com.mercado.dto.ClienteNewDTO;
+import br.com.mercado.model.entity.Categoria;
+import br.com.mercado.model.entity.Cliente;
+import br.com.mercado.model.entity.Cliente;
+import br.com.mercado.repository.ClienteRepository;
+import br.com.mercado.service.CategoriaService;
+import br.com.mercado.service.ClienteService;
+import br.com.mercado.service.exceptions.DataIntegrityException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
+import java.util.Optional;
+
+@SpringBootTest
+@ExtendWith(SpringExtension.class)
+@AutoConfigureMockMvc
+@EnableWebMvc
+@ActiveProfiles("test")
+public class ClienteControllerTest {
+
+    @Autowired
+    private MockMvc mvc;
+
+    @Autowired
+    ClienteService clienteService;
+
+    @MockBean
+    private ClienteRepository clienteRepository;
+    //tentar futuramente alterar para service
+
+    static String cliente_API = "/api/v1/clientes";
+
+    private Cliente gerarCliente() {
+        return new Cliente(null, "Bruno Bergamasco", "brubinho@gmail.com", "184.825.360-52");
+    }
+
+    private ClienteDTO gerarClienteDTO() {
+        return new ClienteDTO(null, "brubinho@gmail.com", "184.825.360-52");
+    }
+
+    private ClienteNewDTO gerarClienteNewDTO() {
+        return new ClienteNewDTO(null, "Bruno Bergamasco", "184.825.360-52", "brubinho@gmail.com");
+    }
+
+
+    @Test
+    @DisplayName("Deve criar um cliente com sucesso")
+    public void deveCriarClienteTest() throws Exception {
+
+        ClienteNewDTO clienteDTO = gerarClienteNewDTO();
+
+        Cliente clienteSalvo = new Cliente(1, "Bruno Bergamasco", "brubinho@gmail.com", "184.825.360-52");
+
+        //REVER - GIVEN
+        BDDMockito.given(clienteRepository.save(Mockito.any(Cliente.class))).willReturn(clienteSalvo);
+
+        String json = new ObjectMapper().writeValueAsString(clienteDTO);
+
+        //determinando o metodo e a URL que fará a request
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post(cliente_API)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("nome").value(clienteDTO.getNome()))
+                .andExpect(MockMvcResultMatchers.jsonPath("cpf").value(clienteDTO.getCpf()))
+                .andExpect(MockMvcResultMatchers.jsonPath("email").value(clienteDTO.getEmail()));
+    }
+
+    @Test
+    @DisplayName("Nao deve criar um cliente com email igual")
+    public void naoDeveCriarClienteComEmailIgualTest() throws Exception {
+
+        ClienteNewDTO clienteDTO = gerarClienteNewDTO();
+        String json = new ObjectMapper().writeValueAsString(clienteDTO);
+
+        BDDMockito.given(clienteRepository.save(Mockito
+                .any(Cliente.class))).willThrow(new DataIntegrityException("Já existe um cliente com este email!"));
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post(cliente_API)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("Nao deve criar um cliente com cpf igual")
+    public void naoDeveCriarClienteComCpfIgualTest() throws Exception {
+
+        ClienteNewDTO clienteDTO = gerarClienteNewDTO();
+        String json = new ObjectMapper().writeValueAsString(clienteDTO);
+
+        BDDMockito.given(clienteRepository.save(Mockito
+                .any(Cliente.class))).willThrow(new DataIntegrityException("Já existe um cliente com este CPF!"));
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .post(cliente_API)
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .content(json);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("deve obter cliente por ID")
+    public void deveObterClienteIdTest() throws Exception {
+
+        Integer id = 1;
+
+        Cliente cliente = gerarCliente();
+        BDDMockito.given(clienteRepository.findById(id)).willReturn(Optional.of(cliente));
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(cliente_API.concat("/" + id))
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("nome").value(cliente.getNome()))
+                .andExpect(MockMvcResultMatchers.jsonPath("cpf").value(cliente.getCpf()))
+                .andExpect(MockMvcResultMatchers.jsonPath("email").value(cliente.getEmail()));
+    }
+
+    @Test
+    @DisplayName("Deve retornar Not Found ao nao encontrar cliente")
+    public void obterCategoriaFalhaTest() throws Exception {
+
+        BDDMockito.given(clienteRepository.findById(Mockito.anyInt())).willReturn(Optional.empty());
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(cliente_API.concat("/" + Mockito.anyInt()))
+                .accept(MediaType.APPLICATION_JSON);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+
+}

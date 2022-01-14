@@ -6,6 +6,8 @@ import br.com.mercado.model.entity.Cliente;
 import br.com.mercado.service.ClienteService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,12 +30,15 @@ public class ClienteController {
 
     @PostMapping
     @ApiOperation(value = "inserir um cliente")
-    public ResponseEntity<Cliente> inserir(@Valid @RequestBody ClienteNewDTO clienteDTO){
+    public ResponseEntity<ClienteNewDTO> inserir(@Valid @RequestBody ClienteNewDTO clienteDTO){
         log.info("Iniciando insercao de cliente");
+
         Cliente cliente = clienteService.fromDTO(clienteDTO);
         clienteService.inserir(cliente);
+        clienteDTO = clienteService.fromEntity(cliente);
+
         log.info("Insercao feita com sucesso do Cliente!");
-        return new ResponseEntity<Cliente>(cliente, HttpStatus.CREATED);
+        return new ResponseEntity<ClienteNewDTO>(clienteDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -47,7 +52,7 @@ public class ClienteController {
     }
 
     @GetMapping
-    @ApiOperation(value = "listar todos os clientes")
+    @Operation(summary = "Listar todos os clientes", security = @SecurityRequirement(name = "Bearer"))
     public ResponseEntity<List<ClienteDTO>> listarTodos(){
         log.info("Iniciando listagem de todos cliente");
         List<Cliente> lista = clienteService.obterTodos();
@@ -58,6 +63,7 @@ public class ClienteController {
         log.info("Listagem feita com sucesso e mostrando no corpo da requisicao.");
         return ResponseEntity.ok().body(listDTO);
     }
+
 
     @PutMapping("/{id}")
     @ApiOperation(value = "alterar um cliente pelo id")

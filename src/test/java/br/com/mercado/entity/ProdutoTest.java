@@ -7,10 +7,12 @@ import br.com.mercado.model.entity.Produto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 
+@ActiveProfiles("test")
 public class ProdutoTest {
 
     private Produto criarProduto(){

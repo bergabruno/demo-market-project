@@ -10,6 +10,9 @@ import br.com.mercado.service.ProdutoService;
 import br.com.mercado.service.exceptions.DataIntegrityException;
 import br.com.mercado.service.exceptions.ObjectNotFoundExcepction;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -32,10 +35,8 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     public Produto buscarPorCodigo(Integer id) {
-        if (!produtoRepository.existsById(id))
-            throw new ObjectNotFoundExcepction("Nao foi encontrado nenhum produto com esse id!");
 
-        return produtoRepository.findById(id).get();
+        return produtoRepository.findById(id).orElseThrow( () -> new ObjectNotFoundExcepction("Nao foi encontrado nenhum produto com esse id!"));
     }
 
     public List<Produto> listarTodos() {
@@ -93,5 +94,10 @@ public class ProdutoServiceImpl implements ProdutoService {
     public ProdutoDTO fromEntityDTO(Produto produto) {
         return new ProdutoDTO(produto.getId(), produto.getNome(), produto.getCodBarras(),
                 produto.getDataValidade(), produto.getValorUnitario(), produto.getCategorias().get(0).getId());
+    }
+
+    public Page<Produto> obterPagina(Integer page, Integer linhasPorPage, String ordenarPor, String direcao){
+        PageRequest pageRequest = PageRequest.of(page,linhasPorPage, Sort.Direction.valueOf(direcao), ordenarPor);
+        return produtoRepository.findAll(pageRequest);
     }
 }

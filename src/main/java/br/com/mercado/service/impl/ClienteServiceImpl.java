@@ -69,6 +69,11 @@ public class ClienteServiceImpl implements ClienteService {
         return new Cliente(null ,clienteDTO.getNome(), clienteDTO.getEmail(), clienteDTO.getCpf());
     }
 
+    @Override
+    public ClienteNewDTO fromEntity(Cliente cliente) {
+        return new ClienteNewDTO(cliente.getId(), cliente.getNome(), cliente.getCpf(), cliente.getEmail());
+    }
+
     private void updateData(Cliente newCliente, Cliente cliente){
         newCliente.setNome(cliente.getNome());
         newCliente.setEmail(cliente.getEmail());

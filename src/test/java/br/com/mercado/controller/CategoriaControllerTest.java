@@ -2,6 +2,7 @@ package br.com.mercado.controller;
 
 import br.com.mercado.dto.CategoriaDTO;
 import br.com.mercado.model.entity.Categoria;
+import br.com.mercado.model.entity.Produto;
 import br.com.mercado.repository.CategoriaRepository;
 import br.com.mercado.service.CategoriaService;
 import br.com.mercado.service.exceptions.DataIntegrityException;
@@ -19,6 +20,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -33,6 +35,7 @@ import java.util.Optional;
 @ExtendWith(SpringExtension.class)
 @AutoConfigureMockMvc
 @EnableWebMvc
+@ActiveProfiles("test")
 //@WebMvcTest ??
 public class CategoriaControllerTest {
 
@@ -42,6 +45,9 @@ public class CategoriaControllerTest {
     @MockBean
     private CategoriaRepository categoriaRepository;
     //tentar futuramente alterar para service
+
+    @Autowired
+    CategoriaService categoriaService;
 
     static String categoria_API = "/api/v1/categorias";
 
@@ -166,7 +172,7 @@ public class CategoriaControllerTest {
     }
 
     @Test
-    @DisplayName("Deve retornar Object Not Found ao deletar livro")
+    @DisplayName("Deve retornar Object Not Found ao deletar categoria")
     public void deveDeletarUmaCategoriaNotFoundTest() throws Exception{
 
         Categoria categoria = new Categoria(1, "Limpeza");
@@ -186,14 +192,16 @@ public class CategoriaControllerTest {
     public void atualizarCategoriaTest() throws Exception{
         Integer id = 12;
 
-        Categoria categoria = criarCategoria();
-        categoria.setId(12);
+        Categoria categoria = new Categoria(12, "Almoxarifado");
 
-        String json = new ObjectMapper().writeValueAsString(categoria);
+        CategoriaDTO categoriaDTO = new CategoriaDTO(categoria);
+        categoriaDTO.setNome("Limpeza");
+
+        String json = new ObjectMapper().writeValueAsString(categoriaDTO);
 
         Mockito.when(categoriaRepository.existsById(Mockito.anyInt())).thenReturn(true);
-        BDDMockito.given(categoriaRepository.findById(id)).willReturn(Optional.of(categoria));
-
+        BDDMockito.given(categoriaRepository.findById(Mockito.anyInt())).willReturn(Optional.of(categoria));
+        BDDMockito.given(categoriaRepository.save(Mockito.any(Categoria.class))).willReturn(categoria);
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .put(categoria_API.concat("/" + id))
@@ -204,7 +212,7 @@ public class CategoriaControllerTest {
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("id").value(id))
-                .andExpect(MockMvcResultMatchers.jsonPath("nome").value("Almoxarifado"));
+                .andExpect(MockMvcResultMatchers.jsonPath("nome").value("Limpeza"));
     }
 
     @Test
@@ -233,7 +241,7 @@ public class CategoriaControllerTest {
 
     @Test
     @DisplayName("Deve retornar um erro de nome obrigario")
-    public void alterarCategoriaSemNome() throws Exception{
+    public void atualizarCategoriaSemNome() throws Exception{
 
         Integer id = 12;
 
@@ -245,7 +253,6 @@ public class CategoriaControllerTest {
 
         Mockito.when(categoriaRepository.existsById(Mockito.anyInt())).thenReturn(true);
         BDDMockito.given(categoriaRepository.findById(id)).willReturn(Optional.of(categoria));
-
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .put(categoria_API.concat("/" + id))

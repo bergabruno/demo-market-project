@@ -3,8 +3,10 @@ package br.com.mercado;
 import br.com.mercado.model.entity.*;
 import br.com.mercado.model.entity.enums.StatusPedido;
 import br.com.mercado.repository.*;
+import br.com.mercado.service.BDService;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,6 +21,21 @@ import java.util.Arrays;
 @SpringBootApplication
 @RestController
 public class MercadoApplication{
+
+	@Autowired
+	BDService bdService;
+
+	@Value("${spring.jpa.hibernate.ddl-auto}")
+	private String ddl;
+
+	@Bean
+	public boolean instanciarBanco(){
+		if("create".equalsIgnoreCase(ddl)){
+			bdService.iniciarBanco();
+			return true;
+		}
+		return false;
+	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(MercadoApplication.class, args);

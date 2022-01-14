@@ -5,11 +5,14 @@ import br.com.mercado.model.entity.Pedido;
 import br.com.mercado.service.PedidoService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.TransactionScoped;
 import javax.validation.Valid;
 import java.util.logging.Logger;
 
@@ -26,14 +29,16 @@ public class PedidoController {
 
     @PostMapping
     @ApiOperation(value = "criar um pedido")
-    public ResponseEntity<Pedido> criarPedido(@Valid @RequestBody PedidoDTO pedidoDTO) {
+    public ResponseEntity<PedidoDTO> criarPedido(@Valid @RequestBody PedidoDTO pedidoDTO) {
         log.info("Iniciando a insercao do pedido");
 
         Pedido pedido = pedidoService.fromDTO(pedidoDTO);
-        pedidoService.criarPedido(pedido);
+        pedido = pedidoService.criarPedido(pedido);
+
+        pedidoDTO = pedidoService.fromEntity(pedido);
 
         log.info("Retornando o pedido junto com HttpStatus CREATED");
-        return new ResponseEntity<Pedido>(pedido, HttpStatus.CREATED);
+        return new ResponseEntity<PedidoDTO>(pedidoDTO, HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -63,14 +68,14 @@ public class PedidoController {
     }
 
     @PutMapping("/deletar-produto/{idPedido}/{codBarras}")
-    @ApiOperation(value = "deletar um produto do pedido")
+    @Operation(summary = "Deletar um produto pelo id", security = @SecurityRequirement(name = "Authorization"))
     public ResponseEntity<Pedido> delProduto(
             @PathVariable Integer idPedido, @PathVariable String codBarras,
             @RequestParam(defaultValue = "1") int quantidadeProd) {
 
         pedidoService.delProduto(idPedido, codBarras, quantidadeProd);
 
-        return new ResponseEntity<Pedido>(pedidoService.buscarPorCodigo(idPedido), HttpStatus.CREATED);
+        return new ResponseEntity<Pedido>(pedidoService.buscarPorCodigo(idPedido), HttpStatus.OK);
     }
 
     @PutMapping("/finalizar/{id}")

@@ -1,5 +1,9 @@
 package br.com.mercado.configurations.security;
 
+import br.com.mercado.security.AdminDetailsServiceImpl;
+import br.com.mercado.security.JWTAutheticationFilter;
+import br.com.mercado.security.JWTAuthorizationFilter;
+import br.com.mercado.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +24,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class BasicSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private AdminDetailsServiceImpl adminDetailsService;
+
+    @Autowired
+    private JWTUtil jwtUtil;
 
     private static final String [] PUBLIC_MATCHERS_GET = {
             "/api/v1/produtos/**",
@@ -53,8 +60,8 @@ public class BasicSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers(HttpMethod.GET,PUBLIC_MATCHERS_GET).permitAll()
-                .antMatchers(HttpMethod.POST,PUBLIC_MATCHERS_POST).permitAll()
+                .antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
+                .antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
                 .antMatchers(HttpMethod.PUT, PUBLIC_MATCHERS_PUT).permitAll()
                 .antMatchers(PUBLIC_MATCHERS_SWAGGER).permitAll()
 //                .antMatchers("/**").permitAll()
@@ -65,11 +72,13 @@ public class BasicSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().cors()
                 .and().csrf().disable();
+        http.addFilter(new JWTAutheticationFilter(authenticationManager(), jwtUtil));
+        http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, adminDetailsService));
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService);
+        auth.userDetailsService(adminDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
 
     @Bean

@@ -2,7 +2,9 @@ package br.com.mercado.service;
 
 import br.com.mercado.dto.ProdutoDTO;
 import br.com.mercado.dto.ProdutoNewDTO;
+import br.com.mercado.model.entity.Categoria;
 import br.com.mercado.model.entity.Produto;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,5 +28,8 @@ public interface ProdutoService {
     public Produto buscarPorCodBarras(String codBarras);
 
     public ProdutoDTO fromEntityDTO(Produto produto);
+
+    public Page<Produto> obterPagina(Integer page, Integer linhasPorPage, String ordenarPor, String direcao);
+
 
 }
