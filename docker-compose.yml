@@ -1,19 +1,22 @@
-version: '3.1'
+version: '3'
 services:
   db:
-    image: mysql:5.7.22
+    image: mariadb:10.6.5
     restart: always
     ports:
-      - "3306:3306"
+      - "3307:3306"
     environment:
       MYSQL_ROOT_PASSWORD: 12345678
-    volumes:
-      - /usr/local/var/mysql:/var/lib/mysql
 
   demo-market-project-java:
     image:  demo-market-project
     restart: always
     ports:
       - 8080:8080
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
     volumes:
-      - ./src/main/resources/application-prod.properties:/usr/app/application-prod.properties
+      - ./src/main/resources/application.properties:/usr/app/application.properties
