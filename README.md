@@ -12,7 +12,7 @@ Postman: <a href="https://documenter.getpostman.com/view/17639626/UVXgLHQS" targ
 
 <ul>
 <li>Java</li>
-li>Spring Boot</li>
+<li>Spring Boot</li>
 <li>Spring Data</li>
 <li>Spring Security</li>
 <li>MySQL</li>
