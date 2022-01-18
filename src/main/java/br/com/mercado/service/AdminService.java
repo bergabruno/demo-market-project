@@ -15,5 +15,4 @@ public interface AdminService {
 
     public Optional<AdminLogin> logar(Optional<AdminLogin> admin);
 
-
 }
