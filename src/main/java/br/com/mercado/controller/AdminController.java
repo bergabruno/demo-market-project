@@ -3,7 +3,10 @@ package br.com.mercado.controller;
 import br.com.mercado.dto.AdminNewDTO;
 import br.com.mercado.model.entity.Admin;
 import br.com.mercado.model.entity.AdminLogin;
+import br.com.mercado.security.AdminDetailsImpl;
+import br.com.mercado.security.JWTUtil;
 import br.com.mercado.service.AdminService;
+import br.com.mercado.service.impl.AdminServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.AllArgsConstructor;
@@ -12,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.util.Optional;
 import java.util.logging.Logger;

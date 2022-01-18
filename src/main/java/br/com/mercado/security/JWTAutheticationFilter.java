@@ -20,11 +20,11 @@ import java.util.ArrayList;
 public class JWTAutheticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private AuthenticationManager authenticationManager;
+
     private JWTUtil jwtUtil;
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-
         try {
             AdminNewDTO adminNewDTO = new ObjectMapper().readValue(request.getInputStream(), AdminNewDTO.class);
             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(adminNewDTO.getLogin(), adminNewDTO.getSenha(), new ArrayList<>());
