@@ -14,5 +14,8 @@ services:
       - 8080:8080
     depends_on:
       - db
+    build:
+      context: .
+      dockerfile: Dockerfile
     volumes:
       - ./src/main/resources/application.properties:/usr/app/application.properties

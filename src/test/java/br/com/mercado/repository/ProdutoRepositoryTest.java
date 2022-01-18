@@ -58,7 +58,7 @@ public class ProdutoRepositoryTest {
     @DisplayName("Deve obter falso ao buscar por um codigo de barras que nao existe")
     public void deveObterFalsoAoBuscarPorCodBarras(){
 
-        boolean checar = produtoRepository.existsByCodBarras(Mockito.anyString());
+        boolean checar = produtoRepository.existsById(Mockito.anyInt());
 
         Assertions.assertThat(checar).isFalse();
     }
