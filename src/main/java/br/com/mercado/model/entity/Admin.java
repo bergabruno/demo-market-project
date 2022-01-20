@@ -1,5 +1,6 @@
 package br.com.mercado.model.entity;
 
+import br.com.mercado.dto.AdminDTO;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -32,4 +33,6 @@ public class Admin {
         this.login = login;
         this.senha = senha;
     }
+
+
 }

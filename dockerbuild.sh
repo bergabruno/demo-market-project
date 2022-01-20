@@ -1,2 +1,2 @@
-mvn clean install -DskipTests=true
+mvn clean install
 docker build -t demo-market-project .

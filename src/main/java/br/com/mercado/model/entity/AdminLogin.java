@@ -1,5 +1,6 @@
 package br.com.mercado.model.entity;
 
+import br.com.mercado.dto.AdminDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,5 +21,10 @@ public class AdminLogin {
     public AdminLogin(String login, String senha) {
         this.login = login;
         this.senha = senha;
+    }
+
+    public AdminLogin(AdminDTO adminDTO) {
+        this.login = adminDTO.getLogin();
+        this.senha = adminDTO.getSenha();
     }
 }
