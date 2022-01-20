@@ -7,7 +7,7 @@ services:
       - "3307:3306"
     environment:
       MYSQL_ROOT_PASSWORD: 12345678
-  demo-market-project-java:
+  app:
     image:  demo-market-project
     restart: always
     ports:
