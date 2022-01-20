@@ -34,6 +34,7 @@ public class JWTAutheticationFilter extends UsernamePasswordAuthenticationFilter
             throw new RuntimeException(e);
         }
     }
+
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
