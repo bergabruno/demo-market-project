@@ -13,6 +13,6 @@ public interface AdminService {
 
     public Admin fromDTO(AdminNewDTO adminDTO);
 
-    public Optional<AdminLogin> logar(Optional<AdminLogin> admin);
+    public AdminLogin logar(AdminLogin admin);
 
 }

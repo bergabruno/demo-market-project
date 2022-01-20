@@ -30,6 +30,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @SpringBootTest
@@ -163,6 +164,38 @@ public class ClienteControllerTest {
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("Deve obter uma lista com todos os clientes")
+    public void listarTodosClientesTest() throws Exception{
+        Cliente cliente1 = gerarCliente();
+        cliente1.setId(1);
+        Cliente cliente2 = gerarCliente();
+        cliente2.setId(2);
+
+        Mockito.when(clienteRepository.findAll()).thenReturn(Arrays.asList(cliente1, cliente2));
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(cliente_API);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    @DisplayName("Deve deletar um cliente")
+    public void deveDeletarUmCliente() throws Exception{
+
+        Cliente cliente = gerarCliente();
+
+        Mockito.when(clienteRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(cliente));
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .delete(cliente_API.concat("/" + 1));
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isNoContent());
     }
 
 

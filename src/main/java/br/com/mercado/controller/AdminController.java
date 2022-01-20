@@ -1,5 +1,6 @@
 package br.com.mercado.controller;
 
+import br.com.mercado.dto.AdminDTO;
 import br.com.mercado.dto.AdminNewDTO;
 import br.com.mercado.model.entity.Admin;
 import br.com.mercado.model.entity.AdminLogin;
@@ -49,10 +50,17 @@ public class AdminController {
 
     @PostMapping("/login")
     @ApiOperation(value = "Faz o login do usuário")
-    public ResponseEntity<AdminLogin> login(@RequestBody @Valid Optional<AdminLogin> admin) {
+    public ResponseEntity<AdminLogin> login(@RequestBody @Valid AdminDTO adminDTO) {
+
+        AdminLogin admin = new AdminLogin(adminDTO);
 
         log.info( "Iniciando o login");
-        return adminService.logar(admin).map(resp -> ResponseEntity.ok(resp))
-                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+
+        admin = adminService.logar(admin);
+
+        log.info( "login feito com sucesso retornando o token no corpo da requisicao");
+
+        return ResponseEntity.ok(admin);
+
     }
 }

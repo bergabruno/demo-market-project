@@ -1,5 +1,6 @@
 package br.com.mercado.controller;
 
+import br.com.mercado.dto.CategoriaDTO;
 import br.com.mercado.dto.ProdutoDTO;
 import br.com.mercado.model.entity.Categoria;
 import br.com.mercado.model.entity.Produto;
@@ -23,6 +24,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 @SpringBootTest
@@ -138,6 +140,57 @@ public class ProdutoControllerTest {
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
+    }
+
+
+    @Test
+    @DisplayName("Deve obter uma lista com todos os produtos")
+    public void listarTodosProdutosTest() throws Exception{
+        Produto prod1 = gerarProduto();
+        prod1.setId(1);
+        prod1.setCategoria(new Categoria(1, "Mercearia"));
+        Produto prod2 = gerarProduto();
+        prod2.setId(2);
+        prod2.setCategoria(new Categoria(1, "Mercearia"));
+
+
+        Mockito.when(produtoRepository.findAll()).thenReturn(Arrays.asList(prod1, prod2));
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(produto_API);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    @DisplayName("Deve atualizar uma categoria")
+    public void atualizarCategoriaTest() throws Exception{
+        Integer id = 12;
+
+        Produto produto = gerarProduto();
+        produto.setId(id);
+        produto.setCategoria(new Categoria(1, "Frutas"));
+
+        ProdutoDTO produtoDTO = new ProdutoDTO(produto);
+        produtoDTO.setNome("banana");
+
+        String json = new ObjectMapper().writeValueAsString(produtoDTO);
+
+        Mockito.when(produtoRepository.existsById(Mockito.anyInt())).thenReturn(true);
+        BDDMockito.given(produtoRepository.findById(Mockito.anyInt())).willReturn(Optional.of(produto));
+        BDDMockito.given(produtoRepository.save(Mockito.any(Produto.class))).willReturn(produto);
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .put(produto_API.concat("/" + id))
+                .content(json)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("id").value(id))
+                .andExpect(MockMvcResultMatchers.jsonPath("nome").value("banana"));
     }
 
 }

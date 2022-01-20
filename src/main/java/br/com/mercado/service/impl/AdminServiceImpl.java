@@ -42,18 +42,17 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public Optional<AdminLogin> logar(Optional<AdminLogin> admin) {
+    public AdminLogin logar(AdminLogin admin) {
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-        Optional<Admin> adminBancoDados = adminRepository.findByLogin(admin.get().getLogin());
+        Optional<Admin> adminBancoDados = adminRepository.findByLogin(admin.getLogin());
 
         if (adminBancoDados.isPresent()) {
-            if (encoder.matches(admin.get().getSenha(), adminBancoDados.get().getSenha())) {
-
-                String token =  "Bearer " + jwtUtil.generateToken(admin.get().getLogin());
-                admin.get().setToken(token);
-                admin.get().setSenha(pw.encode(admin.get().getSenha()));
+            if (encoder.matches(admin.getSenha(), adminBancoDados.get().getSenha())) {
+                String token =  "Bearer " + jwtUtil.generateToken(admin.getLogin());
+                admin.setToken(token);
+                admin.setSenha(pw.encode(admin.getSenha()));
                 return admin;
             }
         } else {

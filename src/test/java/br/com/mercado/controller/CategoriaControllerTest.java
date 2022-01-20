@@ -28,6 +28,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 
@@ -263,6 +264,22 @@ public class CategoriaControllerTest {
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
                 .andExpect(MockMvcResultMatchers.jsonPath("errors", Matchers.hasSize(1)));
+    }
+
+    @Test
+    @DisplayName("Deve obter uma lista com todas as categorias")
+    public void listarTodasCategoriasTest() throws Exception{
+        Categoria cat1 = criarCategoria();
+        cat1.setId(1);
+        Categoria cat2 = new Categoria(2, "Panos");
+
+        Mockito.when(categoriaRepository.findAll()).thenReturn(Arrays.asList(cat1, cat2));
+
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders
+                .get(categoria_API);
+
+        mvc.perform(request)
+                .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
 }
