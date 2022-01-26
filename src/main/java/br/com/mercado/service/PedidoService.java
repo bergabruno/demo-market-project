@@ -5,6 +5,9 @@ import br.com.mercado.model.entity.Pedido;
 
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
+
 public interface PedidoService {
 
     public Pedido buscarPorCodigo(Integer id);
@@ -24,4 +27,6 @@ public interface PedidoService {
     public PedidoDTO fromEntity(Pedido pedido);
 
     public Pedido tipoPagamento(Integer idPedido ,Integer tipo);
+
+    public List<Pedido> pedidosDiarios();
 }

@@ -40,7 +40,11 @@ public class ItemPedido {
 
 
     public double getSubTotal() {
-        return Math.round((preco - desconto) * quantidade);
+        double subTotal = (preco - desconto) * quantidade;
+        String format = String.format("%.2f", subTotal);
+        format = format.replaceAll(",", ".");
+
+        return Double.parseDouble(format);
     }
 
 

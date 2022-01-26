@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -16,5 +17,9 @@ public interface ItemPedidoRepository extends JpaRepository<ItemPedido, Integer>
     @Query
             ("select ip from ItemPedido ip where ip.pedido.id = ?1 and ip.produto.id = ?2")
     public Optional<ItemPedido> acharItemPedido(Integer idPedido, Integer idProduto);
+
+    @Query
+            ("select ip from ItemPedido ip")
+    public List<ItemPedido> findAllPedidos();
 
 }

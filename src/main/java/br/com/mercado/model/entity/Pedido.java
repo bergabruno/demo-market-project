@@ -34,7 +34,7 @@ public class Pedido implements Serializable {
     @JsonIgnore
     private Integer statusPedido;
 
-    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ItemPedido> itens = new ArrayList<>();
 
     @JsonIgnore
@@ -71,10 +71,14 @@ public class Pedido implements Serializable {
     public double getValorTotal() {
         double soma = 0.0;
         for (ItemPedido ip : itens) {
-            soma = soma + ip.getSubTotal(); //No itemPedido, criei esse metodo que faz a soma do produto que está no momento
+            soma = soma + ip.getSubTotal();
         }
-        valorTotal = soma;
-        return Math.round(soma);
+        String format = String.format("%.2f", soma);
+        format = format.replaceAll(",", ".");
+
+        this.valorTotal = Double.parseDouble(format);
+
+        return valorTotal;
     }
 
     @JsonProperty("Status do pedido:")

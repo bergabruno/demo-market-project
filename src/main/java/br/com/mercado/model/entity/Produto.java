@@ -30,9 +30,13 @@ public class Produto implements Serializable {
 
     private Double valorUnitario;
 
-    @OneToMany(cascade= CascadeType.ALL, mappedBy = "pedido")
+    @OneToMany(cascade= CascadeType.ALL, mappedBy = "produto")
     @JsonIgnore
-    List<ItemPedido> itens = new ArrayList<>();
+    private List<ProdutoEstoque> estoque = new ArrayList<>();
+
+    @OneToMany(cascade= CascadeType.ALL, mappedBy = "produto")
+    @JsonIgnore
+    private List<ItemPedido> itens = new ArrayList<>();
 
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "PRODUTO_CATEGORIA",
