@@ -1,8 +1,24 @@
 package br.com.mercado.model.entity;
 
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
+@NoArgsConstructor
+@Getter
+@Setter
 public class Estoque {
 
-    //TODO
-    //PRODUTOS EM ESTOQUE - QUANTIDADE EM UMA TABELA TERNARIA , ID_OPRODUTO - ID_ESTOQUE - QUANTIDADEESTOQUE
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @OneToMany(mappedBy = "estoque", cascade = CascadeType.ALL)
+    private List<ProdutoEstoque> estoque = new ArrayList<>();
 }
