@@ -30,7 +30,7 @@ public class EmailSenderServiceImpl implements EmailSenderService {
 
         mailSender.send(message);
 
-        System.out.println("Mail send...");
+        System.out.println("Email enviado...");
     }
 
     public void sendEmailWithAttachment(String toEmail, String body, String subject, String attachment) throws MessagingException {

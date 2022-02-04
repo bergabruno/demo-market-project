@@ -2,19 +2,18 @@ package br.com.mercado.controller;
 
 import br.com.mercado.dto.CategoriaDTO;
 import br.com.mercado.dto.PedidoDTO;
-import br.com.mercado.model.entity.Categoria;
-import br.com.mercado.model.entity.ItemPedido;
-import br.com.mercado.model.entity.Pedido;
-import br.com.mercado.model.entity.Produto;
+import br.com.mercado.model.entity.*;
 import br.com.mercado.model.entity.enums.StatusPedido;
 import br.com.mercado.model.entity.enums.TipoPagamento;
 import br.com.mercado.repository.CategoriaRepository;
 import br.com.mercado.repository.PedidoRepository;
 import br.com.mercado.repository.ProdutoRepository;
+import br.com.mercado.service.AdminService;
 import br.com.mercado.service.PedidoService;
 import br.com.mercado.service.exceptions.DataIntegrityException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -60,6 +59,20 @@ public class PedidoControllerTest {
 
     static String pedido_API = "/api/v1/pedidos";
 
+    public String tokenGerado;
+
+    @Autowired
+    AdminService adminService;
+
+    @BeforeEach
+    public void tokenGenerate(){
+        AdminLogin admin = new AdminLogin();
+        admin.setLogin("admin");
+        admin.setSenha("admin");
+        admin = adminService.logar(admin);
+        tokenGerado = admin.getToken();
+    }
+
     @Test
     @DisplayName("Deve retornar um pedido pelo id")
     public void obterPedidoTest() throws Exception {
@@ -73,7 +86,8 @@ public class PedidoControllerTest {
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .get(pedido_API.concat("/" + id))
-                .accept(MediaType.APPLICATION_JSON);
+                .accept(MediaType.APPLICATION_JSON).header("Authorization", tokenGerado);
+
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isOk());
@@ -91,7 +105,7 @@ public class PedidoControllerTest {
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .get(pedido_API.concat("/" + id))
-                .accept(MediaType.APPLICATION_JSON);
+                .accept(MediaType.APPLICATION_JSON).header("Authorization", tokenGerado);
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
@@ -138,7 +152,7 @@ public class PedidoControllerTest {
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .get(pedido_API.concat("/" + 1))
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON);
+                .accept(MediaType.APPLICATION_JSON).header("Authorization", tokenGerado);
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isOk());
@@ -246,7 +260,7 @@ public class PedidoControllerTest {
         BDDMockito.given(pedidoRepository.findById(Mockito.anyInt())).willReturn(Optional.of(pedido));
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .put(pedido_API.concat("/cancelar/" + pedido.getId()));
+                .put(pedido_API.concat("/cancelar/" + pedido.getId())).header("Authorization", tokenGerado);
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isOk());

@@ -17,17 +17,24 @@ public class ProdutoEstoque {
     @Column(name = "produto_estoque_id", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
-    private long itemPedidoID;
+    //tirar o id
+    private Integer produtoEstoqueId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "produto_id")
     private Produto produto;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "estoque_id")
     @JsonIgnore
+    //nao mostrar o estoque, so preciso do produto.
     private Estoque estoque;
 
     private Integer quantidade;
 
+    public ProdutoEstoque(Produto produto, Estoque estoque, Integer quantidade) {
+        this.produto = produto;
+        this.quantidade = quantidade;
+        this.estoque = estoque;
+    }
 }

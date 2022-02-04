@@ -2,10 +2,13 @@ package br.com.mercado.controller;
 
 import br.com.mercado.dto.CategoriaDTO;
 import br.com.mercado.dto.ProdutoDTO;
+import br.com.mercado.model.entity.AdminLogin;
 import br.com.mercado.model.entity.Categoria;
 import br.com.mercado.model.entity.Produto;
 import br.com.mercado.repository.ProdutoRepository;
+import br.com.mercado.service.AdminService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -49,6 +52,21 @@ public class ProdutoControllerTest {
                 "20/02/2022", 23.59);
     }
 
+    public String tokenGerado;
+
+    @Autowired
+    AdminService adminService;
+
+    @BeforeEach
+    public void tokenGenerate(){
+        AdminLogin admin = new AdminLogin();
+        admin.setLogin("admin");
+        admin.setSenha("admin");
+        admin = adminService.logar(admin);
+        tokenGerado = admin.getToken();
+    }
+
+
     @Test
     @DisplayName("Deve criar um produto com sucesso")
     public void deveCriarProdutoTest() throws Exception {
@@ -65,7 +83,8 @@ public class ProdutoControllerTest {
                 .post(produto_API)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(json);
+                .content(json).header("Authorization", tokenGerado);
+
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isCreated())
@@ -185,7 +204,8 @@ public class ProdutoControllerTest {
                 .put(produto_API.concat("/" + id))
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON);
+                .contentType(MediaType.APPLICATION_JSON).header("Authorization", tokenGerado);
+
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isOk())

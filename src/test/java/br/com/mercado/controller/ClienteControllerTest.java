@@ -2,15 +2,20 @@ package br.com.mercado.controller;
 
 import br.com.mercado.dto.ClienteDTO;
 import br.com.mercado.dto.ClienteNewDTO;
+import br.com.mercado.model.entity.AdminLogin;
 import br.com.mercado.model.entity.Categoria;
 import br.com.mercado.model.entity.Cliente;
 import br.com.mercado.model.entity.Cliente;
 import br.com.mercado.repository.ClienteRepository;
+import br.com.mercado.service.AdminService;
 import br.com.mercado.service.CategoriaService;
 import br.com.mercado.service.ClienteService;
 import br.com.mercado.service.exceptions.DataIntegrityException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.aspectj.lang.annotation.Before;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -52,6 +57,20 @@ public class ClienteControllerTest {
 
     static String cliente_API = "/api/v1/clientes";
 
+    public String tokenGerado;
+
+    @Autowired
+    AdminService adminService;
+
+    @BeforeEach
+    public void tokenGenerate(){
+        AdminLogin admin = new AdminLogin();
+        admin.setLogin("admin");
+        admin.setSenha("admin");
+        admin = adminService.logar(admin);
+        tokenGerado = admin.getToken();
+    }
+
     private Cliente gerarCliente() {
         return new Cliente(null, "Bruno Bergamasco", "brubinho@gmail.com", "184.825.360-52");
     }
@@ -63,7 +82,6 @@ public class ClienteControllerTest {
     private ClienteNewDTO gerarClienteNewDTO() {
         return new ClienteNewDTO(null, "Bruno Bergamasco", "184.825.360-52", "brubinho@gmail.com");
     }
-
 
     @Test
     @DisplayName("Deve criar um cliente com sucesso")
@@ -83,7 +101,7 @@ public class ClienteControllerTest {
                 .post(cliente_API)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(json);
+                .content(json).header("Authorization", tokenGerado);
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isCreated())
@@ -106,7 +124,7 @@ public class ClienteControllerTest {
                 .post(cliente_API)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(json);
+                .content(json).header("Authorization", tokenGerado);
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
@@ -143,7 +161,7 @@ public class ClienteControllerTest {
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .get(cliente_API.concat("/" + id))
-                .accept(MediaType.APPLICATION_JSON);
+                .accept(MediaType.APPLICATION_JSON).header("Authorization", tokenGerado);
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -160,7 +178,7 @@ public class ClienteControllerTest {
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
                 .get(cliente_API.concat("/" + Mockito.anyInt()))
-                .accept(MediaType.APPLICATION_JSON);
+                .accept(MediaType.APPLICATION_JSON).header("Authorization", tokenGerado);
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
@@ -177,7 +195,7 @@ public class ClienteControllerTest {
         Mockito.when(clienteRepository.findAll()).thenReturn(Arrays.asList(cliente1, cliente2));
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .get(cliente_API);
+                .get(cliente_API).header("Authorization", tokenGerado);
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isOk());
@@ -192,7 +210,7 @@ public class ClienteControllerTest {
         Mockito.when(clienteRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(cliente));
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .delete(cliente_API.concat("/" + 1));
+                .delete(cliente_API.concat("/" + 1)).header("Authorization", tokenGerado);
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isNoContent());

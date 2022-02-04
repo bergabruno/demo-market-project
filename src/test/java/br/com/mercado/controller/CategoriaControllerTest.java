@@ -1,14 +1,20 @@
 package br.com.mercado.controller;
 
 import br.com.mercado.dto.CategoriaDTO;
+import br.com.mercado.model.entity.Admin;
+import br.com.mercado.model.entity.AdminLogin;
 import br.com.mercado.model.entity.Categoria;
 import br.com.mercado.model.entity.Produto;
 import br.com.mercado.repository.CategoriaRepository;
+import br.com.mercado.security.AdminDetailsServiceImpl;
+import br.com.mercado.service.AdminService;
 import br.com.mercado.service.CategoriaService;
 import br.com.mercado.service.exceptions.DataIntegrityException;
+import br.com.mercado.service.impl.AdminServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,16 +47,29 @@ import java.util.Optional;
 public class CategoriaControllerTest {
 
     @Autowired
+    AdminService adminService;
+
+    @Autowired
     private MockMvc mvc;
 
     @MockBean
     private CategoriaRepository categoriaRepository;
-    //tentar futuramente alterar para service
 
     @Autowired
     CategoriaService categoriaService;
 
     static String categoria_API = "/api/v1/categorias";
+
+    public String tokenGerado;
+
+    @BeforeEach
+    public void tokenGenerate(){
+        AdminLogin admin = new AdminLogin();
+        admin.setLogin("admin");
+        admin.setSenha("admin");
+        admin = adminService.logar(admin);
+        tokenGerado = admin.getToken();
+    }
 
     private CategoriaDTO criarCategoriaDTO() {
         return new CategoriaDTO(null, "Almoxarifado");
@@ -77,7 +96,8 @@ public class CategoriaControllerTest {
                 .post(categoria_API)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(json);
+                .content(json)
+                .header("Authorization", tokenGerado);
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isCreated())
@@ -95,7 +115,7 @@ public class CategoriaControllerTest {
                 .post(categoria_API)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(json);
+                .content(json).header("Authorization", tokenGerado);
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
@@ -116,7 +136,7 @@ public class CategoriaControllerTest {
                 .post(categoria_API)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(json);
+                .content(json).header("Authorization", tokenGerado);
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
@@ -166,7 +186,7 @@ public class CategoriaControllerTest {
         BDDMockito.given(categoriaRepository.findById(Mockito.anyInt())).willReturn(Optional.of(categoria));
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .delete(categoria_API.concat("/" + 1));
+                .delete(categoria_API.concat("/" + 1)).header("Authorization", tokenGerado);
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
@@ -182,7 +202,7 @@ public class CategoriaControllerTest {
         BDDMockito.given(categoriaRepository.findById(Mockito.anyInt())).willReturn(Optional.empty());
 
         MockHttpServletRequestBuilder request = MockMvcRequestBuilders
-                .delete(categoria_API.concat("/" + 1));
+                .delete(categoria_API.concat("/" + 1)).header("Authorization", tokenGerado);
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
@@ -208,7 +228,8 @@ public class CategoriaControllerTest {
                 .put(categoria_API.concat("/" + id))
                 .content(json)
                 .accept(MediaType.APPLICATION_JSON)
-                .contentType(MediaType.APPLICATION_JSON);
+                .contentType(MediaType.APPLICATION_JSON)
+                .header("Authorization", tokenGerado);
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -234,7 +255,7 @@ public class CategoriaControllerTest {
                     .put(categoria_API.concat("/" + id))
                     .content(json)
                     .accept(MediaType.APPLICATION_JSON)
-                    .contentType(MediaType.APPLICATION_JSON);
+                    .contentType(MediaType.APPLICATION_JSON).header("Authorization", tokenGerado);
 
             mvc.perform(request)
                     .andExpect(MockMvcResultMatchers.status().isNotFound());
@@ -259,7 +280,7 @@ public class CategoriaControllerTest {
                 .put(categoria_API.concat("/" + id))
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(json);
+                .content(json).header("Authorization", tokenGerado);
 
         mvc.perform(request)
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())

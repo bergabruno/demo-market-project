@@ -1,14 +1,14 @@
 package br.com.mercado.service.impl;
 
-import br.com.mercado.model.entity.Admin;
-import br.com.mercado.model.entity.Categoria;
-import br.com.mercado.model.entity.Produto;
+import br.com.mercado.model.entity.*;
+import br.com.mercado.model.entity.enums.StatusPedido;
 import br.com.mercado.repository.*;
 import br.com.mercado.service.BDService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 
 @Service
@@ -22,6 +22,12 @@ public class BDServiceImpl implements BDService {
     private BCryptPasswordEncoder pw;
 
     private AdminRepository adminRepository;
+
+    private ProdutoEstoqueRepository produtoEstoqueRepository;
+
+    private EstoqueRepository estoqueRepository;
+
+    private ItemPedidoRepository itemPedidoRepository;
 
     public void iniciarBanco(){
         Categoria cat1 = new Categoria(1, "Mercearia");
@@ -110,9 +116,16 @@ public class BDServiceImpl implements BDService {
 
         adminRepository.save(admin);
 
+        Estoque estoque = new Estoque();
+
+        ProdutoEstoque pe1 = new ProdutoEstoque(p1, estoque, 2);
+        p1.getEstoque().add(pe1);
+        ProdutoEstoque pe2 = new ProdutoEstoque(p2, estoque, 5);
+        p2.getEstoque().add(pe2);
+
+        estoque.getProdutos().addAll(Arrays.asList(pe1,pe2));
+
         //categoria ja cria os porodutos pois categoria TEM produtos
         categoriaRepository.saveAll(Arrays.asList(cat1,cat2,cat3,cat4));
-        produtoRepository.saveAll(Arrays.asList(p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16,
-                p17,p18,p19,p20));
     }
 }

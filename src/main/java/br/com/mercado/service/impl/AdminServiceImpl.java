@@ -56,7 +56,7 @@ public class AdminServiceImpl implements AdminService {
                 return admin;
             }
         } else {
-            throw new RuntimeException("Usuario não encontrado");
+            throw new RuntimeException("Admin não encontrado");
         }
         throw new RuntimeException("Senha Incorreta");
 

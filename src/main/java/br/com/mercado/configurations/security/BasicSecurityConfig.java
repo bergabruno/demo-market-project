@@ -30,7 +30,8 @@ public class BasicSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String [] PUBLIC_MATCHERS_GET = {
             "/api/v1/produtos/**",
-            "/api/v1/categorias/**"
+            "/api/v1/categorias/**",
+            "/api/v1/estoque/**"
     };
 
     private static final String [] PUBLIC_MATCHERS_POST = {
@@ -63,7 +64,7 @@ public class BasicSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
                 .antMatchers(HttpMethod.PUT, PUBLIC_MATCHERS_PUT).permitAll()
                 .antMatchers(PUBLIC_MATCHERS_SWAGGER).permitAll()
-                .antMatchers("/**").permitAll()
+//                .antMatchers("/**").permitAll()
                 //para rodar o teste do controller, liberar aqui
                 .anyRequest().authenticated()
                 .and().httpBasic()

@@ -14,6 +14,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import javax.mail.MessagingException;
+import javax.validation.constraints.Email;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -33,14 +34,16 @@ public class Rotina {
     @Autowired
     EmailSenderService emailSenderService;
 
+
     //atributos para a alteracao do produto? minuto, horas, produto, até quando...
 
     //todos os dias, 6 dias por semana as 20h ira enviar um email - relatorio de vendas do dia
-    @Scheduled(cron = "0 0 20 * * ?", zone = "America/Sao_Paulo")
+    @Scheduled(cron = "0 21 8 * * ?", zone = "America/Sao_Paulo")
     public void enviarEmail() throws MessagingException, FileNotFoundException {
         log.info("Enviar planilha para o email as 20h de todos os dias");
 
         gerarPlanilha(); //DataSource
+
 
         LocalDate data = LocalDate.now();
         emailSenderService.sendEmailWithAttachment("brunoberga77@gmail.com",

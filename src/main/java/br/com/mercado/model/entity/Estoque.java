@@ -20,5 +20,5 @@ public class Estoque {
     private Integer id;
 
     @OneToMany(mappedBy = "estoque", cascade = CascadeType.ALL)
-    private List<ProdutoEstoque> estoque = new ArrayList<>();
+    private List<ProdutoEstoque> produtos = new ArrayList<>();
 }

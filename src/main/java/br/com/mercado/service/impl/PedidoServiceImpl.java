@@ -74,9 +74,9 @@ public class PedidoServiceImpl implements PedidoService {
 
 //        fazendo a soma do produto caso ja tenha esse produto
         Pedido pedidoSomado = somarOuSubtrairProd(pedido, produto.getId(), quantidadeProd, "+");
-        if (pedidoSomado != null)
+        if (pedidoSomado != null){
             return pedidoSomado;
-
+        }
 
         ItemPedido ip = new ItemPedido(produto, pedido, 0.0, quantidadeProd, produto.getValorUnitario());
 
@@ -112,6 +112,7 @@ public class PedidoServiceImpl implements PedidoService {
         pedido.setStatusPedido(StatusPedido.FINALIZADO);
 
         pedidoRepository.save(pedido);
+
 
         return pedido;
     }
